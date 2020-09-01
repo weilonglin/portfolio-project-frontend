@@ -1,68 +1,49 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Dog Tinder
 
-## Available Scripts
+## Wireframe
 
-In the project directory, you can run:
+<img src="./Homepage_&_signup.png"/>
+<img src="./Feed_&_messages.png"/>
+<img src="./Login_&_My_profile.png"/>
 
-### `npm start`
+## User stories
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### As a user, I would like to signup and make a profile
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### As a user, I want to add my dogs to my profile, to find a dog date
 
-### `npm test`
+### As a user, I want to browse through a feed of other dog profiles, to find the perfect match for my dog
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### As a user, I want to “like” a dog profile, so that the other dog owner gets notified on our intrest
 
-### `npm run build`
+### As a user, I want to know when another user has “liked” my dog’s profile, so we can chat and possible arrange a walk
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### As a user, I want to “dislike” a profile that is in no way a match, by disliking, the app shouldn’t show me that profile again
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### As a user, I want targeted profiles served on the feed, so the best matches show up
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### As a user, I want to filter through profiles, to find the best matches.
 
-### `npm run eject`
+## Relations DB
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<img src="./Untitled.png"/>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Users hasMany dogs
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Dogs belongsTo Users
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Dogs belongsToMany tags
 
-## Learn More
+### Tags belongsToMany dogs
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### chatMessages belongsTo users
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### chatMessages belongsTo recipient
 
-### Code Splitting
+### Dogs hasMany joinedTableLikes
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### JoinedTableLikes belongsTo users
 
-### Analyzing the Bundle Size
+### Dogs hasMany joinedTabledislikes
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### joinedTabledislikes belongsTo users
