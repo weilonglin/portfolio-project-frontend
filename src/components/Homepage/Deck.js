@@ -3,11 +3,11 @@ import "./Deck.css";
 import TinderCard from "react-tinder-card";
 import { useQuery } from "@apollo/react-hooks";
 
-import { GET_USER, GET_ALL_DOGS } from "../../graphql/queries";
+import { GET_ALL_DOG_IMAGE } from "../../graphql/queries";
 
 export default function Deck() {
   const [lastDirection, setLastDirection] = useState();
-  const { loading, error, data } = useQuery(GET_ALL_DOGS);
+  const { loading, error, data } = useQuery(GET_ALL_DOG_IMAGE);
 
   if (loading) return "Loading...";
   if (error) return <p>Error! ${error.message}</p>;
@@ -48,12 +48,6 @@ export default function Deck() {
           </TinderCard>
         ))}
       </div>
-
-      {lastDirection ? (
-        <h2 className="infoText">You swiped {lastDirection}</h2>
-      ) : (
-        <h2 className="infoText" />
-      )}
     </div>
   );
 }

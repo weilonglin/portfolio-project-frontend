@@ -1,6 +1,5 @@
 import React from "react";
 
-import Banner from "../../components/Homepage/Banner";
 import Deck from "../../components/Homepage/Deck";
 
 export default function Homepage() {

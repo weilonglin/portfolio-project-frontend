@@ -7,6 +7,8 @@ export default function Navbar() {
       <NavLink to="/">Home</NavLink>
       <NavLink to="/feed">Feed</NavLink>
       <NavLink to="/profile">My Profile</NavLink>
+      <NavLink to="/login">Login</NavLink>
+      <NavLink to="/signup">Sign up</NavLink>
     </navBar>
   );
 }

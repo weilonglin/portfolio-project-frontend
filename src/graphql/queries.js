@@ -16,9 +16,20 @@ export const GET_ALL_DOGS = gql`
       gender
       imageUrl
       tagLine
-      owner {
-        userName
+      tag {
+        id
+        name
       }
+    }
+  }
+`;
+
+export const GET_ALL_DOG_IMAGE = gql`
+  query {
+    allDogs {
+      id
+      name
+      imageUrl
     }
   }
 `;
