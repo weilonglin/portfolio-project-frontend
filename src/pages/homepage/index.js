@@ -1,0 +1,16 @@
+import React from "react";
+
+import Banner from "../../components/Homepage/Banner";
+import Deck from "../../components/Homepage/Deck";
+
+export default function Homepage() {
+  return (
+    <div>
+      <h1>Match. Chat. Date</h1>
+      <h3>Discover</h3>
+      <Deck />
+      <button>Sign up</button>
+      <button>Log in </button>
+    </div>
+  );
+}
