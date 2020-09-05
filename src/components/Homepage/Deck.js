@@ -6,7 +6,6 @@ import { useQuery } from "@apollo/react-hooks";
 import { GET_ALL_DOG_IMAGE } from "../../graphql/queries";
 
 export default function Deck() {
-  const [lastDirection, setLastDirection] = useState();
   const { loading, error, data } = useQuery(GET_ALL_DOG_IMAGE);
 
   if (loading) return "Loading...";
@@ -17,12 +16,11 @@ export default function Deck() {
   const characters = db;
 
   const swiped = (direction, nameToDelete) => {
-    console.log("removing: " + nameToDelete);
-    setLastDirection(direction);
+    console.log("Nope" + nameToDelete);
   };
 
   const outOfFrame = (name) => {
-    console.log(name + " left the screen!");
+    console.log("Like" + name);
   };
 
   return (
