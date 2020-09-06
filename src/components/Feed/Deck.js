@@ -18,7 +18,7 @@ export default function Deck() {
   const characters = db;
 
   const swiped = (direction, nameToDelete) => {
-    console.log("removing: " + nameToDelete);
+    console.log("removing: " + nameToDelete, direction);
     setLastDirection(direction);
   };
 

@@ -1,4 +1,4 @@
-h1 {
+/*h1 {
   font-family: "Alatsi", sans-serif;
   color: #fff;
   text-shadow: 0px 0px 60px 0px rgba(0, 0, 0, 0.3);
@@ -7,13 +7,13 @@ h1 {
 .swipe {
   position: absolute;
 }
-/* 
+
 .cardContainer {
   width: 90vw;
   max-width: 260px;
   height: 300px;
 } */
-
+/*
 .feedContainer {
   background-color: floralwhite;
 }
@@ -81,3 +81,4 @@ h1 {
   padding-bottom: 10px;
   background-color: #fff;
 }
+*/

@@ -5,7 +5,7 @@ import { REGISTER_USER } from "../../graphql/queries";
 
 import { useMutation } from "@apollo/react-hooks";
 
-export default function Signup(props) {
+export default function SignupUser(props) {
   const history = useHistory;
   const [variables, setVariables] = useState({
     full_name: "",
@@ -18,7 +18,7 @@ export default function Signup(props) {
   const [errors, setErrors] = useState({});
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
-    update: (_, __) => props.history.push("/login"),
+    update: (_, __) => props.history.push("/add-dog"),
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
   });
 

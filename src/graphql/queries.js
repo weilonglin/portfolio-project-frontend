@@ -90,12 +90,44 @@ export const REGISTER_USER = gql`
   }
 `;
 
+export const REGISTER_DOG = gql`
+  mutation registerDog(
+    $name: String!
+    $gender: String!
+    $tagLine: String!
+    $imageUrl: String!
+    $ownerId: Int!
+  ) {
+    registerDog(
+      name: $name
+      gender: $gender
+      tagLine: $tagLine
+      imageUrl: $imageUrl
+      ownerId: $ownerId
+    ) {
+      name
+    }
+  }
+`;
+
 export const LOGIN_USER = gql`
   query login($userName: String!, $password: String!) {
     login(userName: $userName, password: $password) {
       userName
       email
       token
+    }
+  }
+`;
+
+export const SUB_MESSAGE = gql`
+  subscription {
+    newMessage {
+      id
+      userId
+      message
+      recipientId
+      recipientName
     }
   }
 `;
