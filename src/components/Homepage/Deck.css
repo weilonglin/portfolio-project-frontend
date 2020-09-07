@@ -1,16 +1,10 @@
-h1 {
-  font-family: "Alatsi", sans-serif;
-  color: #fff;
-  text-shadow: 0px 0px 60px 0px rgba(0, 0, 0, 0.3);
-}
-
 .swipe {
   position: absolute;
 }
 
 .cardContainer {
   width: 90vw;
-  max-width: 260px;
+  max-width: 50vw;
   height: 300px;
 }
 

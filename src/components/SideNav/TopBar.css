@@ -1,11 +1,10 @@
 .topBar {
   display: flex;
-  width: 15rem;
+  width: 100%;
   position: absolute;
   background: linear-gradient(262deg, #ff7854, #fd267d);
   top: 0;
   left: 0;
-  margin: 10px;
   color: rgb(0, 0, 0);
   z-index: 9999;
 }

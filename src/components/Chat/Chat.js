@@ -1,17 +1,11 @@
-import React from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { GET_ALL_MESSAGES } from "../../graphql/queries";
+import React, { useState, useEffect } from "react";
+import { useSubscription } from "@apollo/react-hooks";
+import { SUB_MESSAGE, GET_ALL_MESSAGES } from "../../graphql/queries";
 
-export default function Chat() {
-  const { loading, error, data } = useQuery(GET_ALL_MESSAGES);
-
-  if (loading) return "Loading...";
-  if (error) return <p>Error! ${error.message}</p>;
-  console.log("data", data);
-
+export default function Chat(props) {
   return (
     <div>
-      <h1>MESSAGES</h1>
+      <p>{props.name}</p>
     </div>
   );
 }

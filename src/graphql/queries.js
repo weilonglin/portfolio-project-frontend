@@ -1,9 +1,58 @@
 import gql from "graphql-tag";
 
 export const GET_USER = gql`
-  query {
-    user(id: 1) {
+  query user($id: Int!) {
+    user(id: $id) {
+      id
       full_name
+      userName
+      email
+      address
+      city
+      dogs {
+        name
+        gender
+        imageUrl
+        tagLine
+        tag {
+          name
+        }
+      }
+      sender {
+        message
+        recipientId
+        recipientName
+      }
+      recipient {
+        message
+        userId
+      }
+      dogLike {
+        userId
+        dogId
+        liked
+      }
+      userLike {
+        userId
+        dogId
+        liked
+      }
+    }
+  }
+`;
+
+export const GET_ALL_MESSAGES = gql`
+  query user($id: Int!) {
+    user(id: $id) {
+      sender {
+        userId
+        message
+      }
+      recipient {
+        recipientId
+        recipientName
+        message
+      }
     }
   }
 `;
@@ -30,22 +79,6 @@ export const GET_ALL_DOG_IMAGE = gql`
       id
       name
       imageUrl
-    }
-  }
-`;
-
-export const GET_ALL_MESSAGES = gql`
-  query {
-    user(id: 1) {
-      sender {
-        userId
-        message
-      }
-      recipient {
-        recipientId
-        recipientName
-        message
-      }
     }
   }
 `;
@@ -121,8 +154,8 @@ export const LOGIN_USER = gql`
 `;
 
 export const SUB_MESSAGE = gql`
-  subscription {
-    newMessage {
+  subscription chatMessage($userId: Int!, $recipientId: Int!) {
+    chatMessage(userId: $userId, recipientId: $recipientId) {
       id
       userId
       message

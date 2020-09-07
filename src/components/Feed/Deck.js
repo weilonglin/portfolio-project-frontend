@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Deck.css";
 import TinderCard from "react-tinder-card";
 import { useQuery } from "@apollo/react-hooks";
 import Button from "react-bootstrap/Button";
@@ -12,13 +11,12 @@ export default function Deck() {
 
   if (loading) return "Loading...";
   if (error) return <p>Error! ${error.message}</p>;
-  console.log("data", data.allDogs);
 
   const db = data;
   const characters = db;
 
   const swiped = (direction, nameToDelete) => {
-    console.log("removing: " + nameToDelete, direction);
+    console.log("removing: " + nameToDelete);
     setLastDirection(direction);
   };
 
@@ -61,9 +59,7 @@ export default function Deck() {
                       );
                     })}
                   </div>
-                  <div>
-                    <button>info</button>
-                  </div>
+                  <div></div>
                 </div>
               </div>
             </TinderCard>

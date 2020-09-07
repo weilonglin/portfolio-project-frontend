@@ -11,21 +11,26 @@ import SignupDog from "./pages/signupDog";
 import Feed from "./pages/feed";
 import MyProfile from "./pages/myprofile";
 
+import { AuthProvider } from "./context/auth";
+import DynamicRoute from "./dynamicRoute";
+
 import "bootstrap/dist/css/bootstrap.css";
 function App() {
   return (
     <div className="App">
-      <NavBar />
-      <Container className="pt-5">
-        <Switch>
-          <Route exact path="/" component={Homepage} />
-          <Route path="/feed" component={Feed} />
-          <Route path="/profile" component={MyProfile} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={SignupUser} />
-          <Route path="/add-dog" component={SignupDog} />
-        </Switch>
-      </Container>
+      <AuthProvider>
+        <Container className="pt-5">
+          <NavBar />
+          <Switch>
+            <DynamicRoute exact path="/" component={Homepage} guest />
+            <DynamicRoute path="/feed" component={Feed} authenticated />
+            <DynamicRoute path="/profile" component={MyProfile} authenticated />
+            <DynamicRoute path="/login" component={Login} guest />
+            <DynamicRoute path="/signup" component={SignupUser} guest />
+            <DynamicRoute path="/add-dog" component={SignupDog} authenticated />
+          </Switch>
+        </Container>
+      </AuthProvider>
     </div>
   );
 }

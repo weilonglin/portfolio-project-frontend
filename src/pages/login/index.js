@@ -6,6 +6,8 @@ import { gql } from "@apollo/client";
 import { LOGIN_USER } from "../../graphql/queries";
 import { useLazyQuery } from "@apollo/react-hooks";
 
+import { useAuthDispatch } from "../../context/auth";
+
 export default function Register(props) {
   const [variables, setVariables] = useState({
     username: "",
@@ -13,10 +15,12 @@ export default function Register(props) {
   });
   const [errors, setErrors] = useState({});
 
+  const dispatch = useAuthDispatch();
+
   const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
     onCompleted(data) {
-      localStorage.setItem("token", data.login.token);
+      dispatch({ type: "LOGIN", payload: data.login });
       props.history.push("/feed");
     },
   });
