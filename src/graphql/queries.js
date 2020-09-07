@@ -20,12 +20,15 @@ export const GET_USER = gql`
       }
       sender {
         message
+        userId
         recipientId
         recipientName
       }
       recipient {
         message
         userId
+        recipientId
+        recipientName
       }
       dogLike {
         userId

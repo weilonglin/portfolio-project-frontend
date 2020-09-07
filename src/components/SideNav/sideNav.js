@@ -14,7 +14,9 @@ import { SUB_MESSAGE } from "../../graphql/queries";
 export default function SideNav(props) {
   const [allNames, setAllnames] = useState([]);
   const [chatUsers, setChatUsers] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [sender, setSender] = useState([]);
+  const [recipient, setRecipient] = useState([]);
+  const [chat, setChat] = useState(``);
   const user = localStorage.getItem("user");
 
   const { loading, error, data } = useQuery(GET_USER, {
@@ -22,7 +24,7 @@ export default function SideNav(props) {
       id: parseInt(user),
     },
   });
-
+  console.log("user data", data);
   const {
     loading: subLoading,
     error: subError,
@@ -56,15 +58,34 @@ export default function SideNav(props) {
       : data.user.sender.map((name) => {
           return name.recipientName;
         });
+
+    const senderMessages = loading
+      ? null
+      : data.user.sender.map((name) => {
+          return name;
+        });
+    const recipientMessages = loading
+      ? null
+      : data.user.recipient.map((name) => {
+          return name;
+        });
     setAllnames(chats);
+    console.log("senderMessages", senderMessages);
+    setSender(senderMessages);
+    console.log("recipientMessages", recipientMessages);
+    setRecipient(recipientMessages);
   }, [data]);
   // const subData = sloading ? null :
 
   useEffect(() => {
     const subChat = subLoading ? null : subData.chatMessage.recipientName;
+    const subMessages = subLoading ? null : subData.chatMessage;
 
     const newNames = [...allNames, subChat];
+    const newMessage = [...sender, subMessages];
     setAllnames(newNames);
+    console.log("newMessage", newMessage);
+    setSender(newMessage);
   }, [subData]);
 
   useEffect(() => {
@@ -75,19 +96,24 @@ export default function SideNav(props) {
     setChatUsers(names);
   }, [allNames]);
 
+  // const avatar =
+  //   chatUsers === null
+  //     ? null
+  //     : chatUsers.map((user) => {
+  //         return <Chat name={user} messages={{ sender }} data={{ data }} />;
+  //       });
+
   const avatar =
-    chatUsers === null
+    sender === null
       ? null
       : chatUsers.map((user) => {
-          // return <Avatar key={user}>{user}</Avatar>;
-          return <p key={user}>{user}</p>;
+          return <Chat name={user} messages={{ sender }} data={{ data }} />;
         });
 
   return (
     <div className="sidenav">
       <TopBar />
-
-      <Chat name={avatar} data={{ data }} />
+      {avatar}
       <button className="signOutButton" onClick={logout}>
         Log out
       </button>
