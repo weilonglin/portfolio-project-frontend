@@ -15,10 +15,10 @@ export default function Chat(props) {
       props.data === undefined
         ? props.messages
         : props.data.chatMessage.recipientName === props.name
-        ? [...props.messages, props.data.chatMessage]
+        ? [...messages, props.data.chatMessage]
         : props.messages;
     setMessages(data);
-  }, [props]);
+  }, [props.data]);
 
   function toggleActive() {
     if (active === false) {

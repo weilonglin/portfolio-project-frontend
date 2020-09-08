@@ -98,18 +98,26 @@ export const GET_ALL_DOG_IMAGE = gql`
 `;
 
 export const SEND_MESSAGE = gql`
-  mutation {
+  mutation sendMessage(
+    $userId: Int!
+    $message: String!
+    $recipientId: Int!
+    $recipientName: String!
+    $imageUrl: String
+  ) {
     sendMessage(
-      userId: 1
-      message: "Hello"
-      recipientId: 2
-      recipientName: "leo77"
+      userId: $userId
+      message: $message
+      recipientId: $recipientId
+      recipientName: $recipientName
+      imageUrl: $imageUrl
     ) {
       id
       userId
       message
       recipientId
       recipientName
+      imageUrl
     }
   }
 `;

@@ -65,8 +65,6 @@ export default function Deck() {
             </TinderCard>
           </div>
         ))}
-        <button className="nopeButton">Nope</button>
-        <button className="likeButton">Like</button>
       </div>
     </div>
   );

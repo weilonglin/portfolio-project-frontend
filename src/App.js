@@ -4,7 +4,6 @@ import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar/NavBar";
 import Homepage from "./pages/homepage";
 
-import "./App.css";
 import Login from "./pages/login";
 import SignupUser from "./pages/signupUser";
 import SignupDog from "./pages/signupDog";
@@ -13,11 +12,11 @@ import MyProfile from "./pages/myprofile";
 
 import { AuthProvider } from "./context/auth";
 import DynamicRoute from "./dynamicRoute";
+import { Grid } from "@material-ui/core";
 
-import "bootstrap/dist/css/bootstrap.css";
 function App() {
   return (
-    <div className="App">
+    <Grid container direction="column">
       <AuthProvider>
         <Container className="pt-5">
           <NavBar />
@@ -31,7 +30,7 @@ function App() {
           </Switch>
         </Container>
       </AuthProvider>
-    </div>
+    </Grid>
   );
 }
 
