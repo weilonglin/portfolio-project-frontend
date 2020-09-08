@@ -6,10 +6,10 @@ import { useAuthDispatch } from "../../context/auth";
 import { useHistory, Link } from "react-router-dom";
 import decode from "jwt-decode";
 import { GET_USER } from "../../graphql/queries";
-import { useQuery, useSubscription } from "@apollo/react-hooks";
+import { useQuery, useSubscription, useLazyQuery } from "@apollo/react-hooks";
 import { Avatar, classes } from "@material-ui/core";
 import { array } from "prop-types";
-import { SUB_MESSAGE } from "../../graphql/queries";
+import { SUB_MESSAGE, GET_USER_IMAGE } from "../../graphql/queries";
 
 export default function SideNav(props) {
   const [allNames, setAllnames] = useState([]);
@@ -24,7 +24,7 @@ export default function SideNav(props) {
       id: parseInt(user),
     },
   });
-  console.log("user data", data);
+
   const {
     loading: subLoading,
     error: subError,
@@ -66,13 +66,14 @@ export default function SideNav(props) {
         });
     const recipientMessages = loading
       ? null
-      : data.user.recipient.map((name) => {
+      : data.user.sender.map((name) => {
           return name;
         });
+
     setAllnames(chats);
-    console.log("senderMessages", senderMessages);
-    setSender(senderMessages);
-    console.log("recipientMessages", recipientMessages);
+
+    setSender(recipientMessages);
+
     setRecipient(recipientMessages);
   }, [data]);
   // const subData = sloading ? null :
@@ -84,7 +85,7 @@ export default function SideNav(props) {
     const newNames = [...allNames, subChat];
     const newMessage = [...sender, subMessages];
     setAllnames(newNames);
-    console.log("newMessage", newMessage);
+
     setSender(newMessage);
   }, [subData]);
 
@@ -93,6 +94,7 @@ export default function SideNav(props) {
       allNames === null
         ? null
         : allNames.filter((val, id, array) => array.indexOf(val) == id);
+
     setChatUsers(names);
   }, [allNames]);
 
@@ -107,21 +109,31 @@ export default function SideNav(props) {
     sender === null
       ? null
       : chatUsers.map((user) => {
-          const chats = loading
-            ? null
-            : data.user.sender.filter((name) => {
-                if (name.recipientName === user) {
-                  return name;
-                }
-              });
-          console.log("is there something in chats?", chats);
-          return <Chat name={user} messages={chats} data={{ data }} />;
+          const chats =
+            loading || data == undefined
+              ? null
+              : data.user.sender.filter((name) => {
+                  if (name.recipientName === user) {
+                    return name;
+                  }
+                });
+
+          const image =
+            chats == null
+              ? null
+              : chats.map((chat) => {
+                  return chat.imageUrl;
+                });
+
+          return (
+            <Chat src={image} name={user} messages={chats} data={subData} />
+          );
         });
 
   return (
     <div className="sidenav">
       <TopBar />
-      {avatar}
+      {avatar == undefined ? null : avatar}
       <button className="signOutButton" onClick={logout}>
         Log out
       </button>

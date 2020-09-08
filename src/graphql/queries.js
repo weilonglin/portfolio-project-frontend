@@ -6,6 +6,7 @@ export const GET_USER = gql`
       id
       full_name
       userName
+
       email
       address
       city
@@ -21,12 +22,14 @@ export const GET_USER = gql`
       sender {
         message
         userId
+        imageUrl
         recipientId
         recipientName
       }
       recipient {
         message
         userId
+        imageUrl
         recipientId
         recipientName
       }
@@ -40,6 +43,14 @@ export const GET_USER = gql`
         dogId
         liked
       }
+    }
+  }
+`;
+
+export const GET_USER_IMAGE = gql`
+  query user($id: Int!) {
+    user(id: $id) {
+      image
     }
   }
 `;

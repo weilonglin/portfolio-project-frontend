@@ -4,31 +4,23 @@ import { SUB_MESSAGE, GET_ALL_MESSAGES } from "../../graphql/queries";
 import myMessages from "./myMessages";
 import { GET_USER } from "../../graphql/queries";
 
+import { Avatar, classes } from "@material-ui/core";
+
 export default function Chat(props) {
-  console.log("sender chat component", props.messages);
-  console.log("props name", props.name);
   const [active, setActive] = useState(false);
-  // const [messages, setMessages] = useState([]);
-  // const [messageFilter, setMessageFilter] = useState([]);
-  // const user = localStorage.getItem("user");
+  const [messages, setMessages] = useState([]);
+  console.log("message", props.messages);
+  console.log("subdata", props.data);
 
-  // const { loading, error, data } = useQuery(GET_USER, {
-  //   variables: {
-  //     id: parseInt(user),
-  //   },
-  // });
-  // console.log("user data in chat component", data);
-
-  // useEffect(() => {
-
-  //   console.log("chats", chats);
-  //   if (active === false) {
-  //     setMessageFilter([]);
-  //   } else {
-  //     setMessageFilter([]);
-  //     setMessageFilter(chats);
-  //   }
-  // }, [active]);
+  useEffect(() => {
+    const data =
+      props.data === undefined
+        ? props.messages
+        : props.data.chatMessage.recipientName === props.name
+        ? [...props.messages, props.data.chatMessage]
+        : props.messages;
+    setMessages(data);
+  }, [props]);
 
   function toggleActive() {
     if (active === false) {
@@ -37,22 +29,17 @@ export default function Chat(props) {
       setActive(false);
     }
   }
-
-  // const yourMessages =
-  //   messageFilter == null
-  //     ? null
-  //     : messageFilter.map((message) => {
-  //         return (
-  //           <div>
-  //             <p>{message.message}</p>
-  //           </div>
-  //         );
-  //       });
-  // console.log("messages state", messages);
-
+  console.log("messages state", messages);
+  const chat =
+    messages === null
+      ? null
+      : messages.map((message) => {
+          return <a>{message.message}</a>;
+        });
   return (
     <div>
-      <a onClick={toggleActive}>{props.name}</a>
+      <Avatar alt={props.name} src={props.src} onClick={toggleActive} />
+      <div className="message">{active === false ? null : chat}</div>
 
       {/* <myMessages message={chats} active={active} /> */}
     </div>
