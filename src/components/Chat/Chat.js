@@ -9,8 +9,6 @@ import { Avatar, classes } from "@material-ui/core";
 export default function Chat(props) {
   const [active, setActive] = useState(false);
   const [messages, setMessages] = useState([]);
-  console.log("message", props.messages);
-  console.log("subdata", props.data);
 
   useEffect(() => {
     const data =
@@ -29,7 +27,6 @@ export default function Chat(props) {
       setActive(false);
     }
   }
-  console.log("messages state", messages);
   const chat =
     messages === null
       ? null
