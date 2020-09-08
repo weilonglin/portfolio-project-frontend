@@ -1,26 +1,36 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-
+import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar/NavBar";
 import Homepage from "./pages/homepage";
 
 import "./App.css";
 import Login from "./pages/login";
-import Signup from "./pages/signup";
+import SignupUser from "./pages/signupUser";
+import SignupDog from "./pages/signupDog";
 import Feed from "./pages/feed";
 import MyProfile from "./pages/myprofile";
 
+import { AuthProvider } from "./context/auth";
+import DynamicRoute from "./dynamicRoute";
+
+import "bootstrap/dist/css/bootstrap.css";
 function App() {
   return (
     <div className="App">
-      <NavBar />
-      <Switch>
-        <Route exact path="/" component={Homepage} />
-        <Route path="/feed" component={Feed} />
-        <Route path="/profile" component={MyProfile} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-      </Switch>
+      <AuthProvider>
+        <Container className="pt-5">
+          <NavBar />
+          <Switch>
+            <DynamicRoute exact path="/" component={Homepage} guest />
+            <DynamicRoute path="/feed" component={Feed} authenticated />
+            <DynamicRoute path="/profile" component={MyProfile} authenticated />
+            <DynamicRoute path="/login" component={Login} guest />
+            <DynamicRoute path="/signup" component={SignupUser} guest />
+            <DynamicRoute path="/add-dog" component={SignupDog} authenticated />
+          </Switch>
+        </Container>
+      </AuthProvider>
     </div>
   );
 }

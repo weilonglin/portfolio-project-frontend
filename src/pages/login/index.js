@@ -1,38 +1,78 @@
 import React, { useState, useEffect } from "react";
-import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import { Col } from "react-bootstrap";
 import { useHistory, Link } from "react-router-dom";
+import { Row, Col, Form, Button } from "react-bootstrap";
+import { gql } from "@apollo/client";
+import { LOGIN_USER } from "../../graphql/queries";
+import { useLazyQuery } from "@apollo/react-hooks";
 
-export default function Login() {
-  function submitForm(event) {
-    console.log("hi");
-    event.preventDefault();
-  }
+import { useAuthDispatch } from "../../context/auth";
+
+export default function Register(props) {
+  const [variables, setVariables] = useState({
+    username: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+
+  const dispatch = useAuthDispatch();
+
+  const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
+    onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
+    onCompleted(data) {
+      dispatch({ type: "LOGIN", payload: data.login });
+      props.history.push("/feed");
+    },
+  });
+
+  const submitLoginForm = (e) => {
+    e.preventDefault();
+
+    loginUser({ variables });
+  };
 
   return (
-    <Container>
-      <Form as={Col} md={{ span: 6, offset: 3 }} className="mt-5">
-        <h1 className="mt-5 mb-5">Login</h1>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" required />
-        </Form.Group>
-
-        <Form.Group controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" required />
-        </Form.Group>
-        <Form.Group className="mt-5">
-          <Button variant="primary" type="submit" onClick={submitForm}>
-            Log in
-          </Button>
-        </Form.Group>
-        <Link to="/signup" style={{ textAlign: "center" }}>
-          Click here to sign up
-        </Link>
-      </Form>
-    </Container>
+    <Row className="bg-white py-5 justify-content-center">
+      <Col sm={8} md={6} lg={4}>
+        <h1 className="text-center">Login</h1>
+        <Form onSubmit={submitLoginForm}>
+          <Form.Group>
+            <Form.Label className={errors.userName && "text-danger"}>
+              {errors.userName ?? "Username"}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              value={variables.userName}
+              className={errors.userName && "is-invalid"}
+              onChange={(e) =>
+                setVariables({ ...variables, userName: e.target.value })
+              }
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className={errors.password && "text-danger"}>
+              {errors.password ?? "Password"}
+            </Form.Label>
+            <Form.Control
+              type="password"
+              value={variables.password}
+              className={errors.password && "is-invalid"}
+              onChange={(e) =>
+                setVariables({ ...variables, password: e.target.value })
+              }
+            />
+          </Form.Group>
+          <div className="text-center">
+            <Button variant="success" type="submit" disabled={loading}>
+              {loading ? "loading.." : "Login"}
+            </Button>
+            <br />
+            <small>
+              Don't have an account? <Link to="/register">Register</Link>
+            </small>
+          </div>
+        </Form>
+      </Col>
+    </Row>
   );
 }

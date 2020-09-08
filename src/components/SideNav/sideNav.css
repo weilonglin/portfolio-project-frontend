@@ -1,6 +1,6 @@
 .sidenav {
   height: 100%;
-  width: 15vw;
+  width: 20vw;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -26,6 +26,12 @@
   margin-left: 160px; /* Same as the width of the sidenav */
   font-size: 28px; /* Increased text to enable scrolling */
   padding: 0px 10px;
+}
+
+.signOutButton {
+  position: fixed;
+  bottom: 0;
+  align-items: center;
 }
 
 @media screen and (max-height: 450px) {
