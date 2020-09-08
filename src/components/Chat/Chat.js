@@ -8,26 +8,27 @@ export default function Chat(props) {
   console.log("sender chat component", props.messages);
   console.log("props name", props.name);
   const [active, setActive] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [messageFilter, setMessageFilter] = useState([]);
-  const user = localStorage.getItem("user");
+  // const [messages, setMessages] = useState([]);
+  // const [messageFilter, setMessageFilter] = useState([]);
+  // const user = localStorage.getItem("user");
 
-  const { loading, error, data } = useQuery(GET_USER, {
-    variables: {
-      id: parseInt(user),
-    },
-  });
-  console.log("user data in chat component", data);
+  // const { loading, error, data } = useQuery(GET_USER, {
+  //   variables: {
+  //     id: parseInt(user),
+  //   },
+  // });
+  // console.log("user data in chat component", data);
 
-  const chats = loading
-    ? null
-    : data.user.sender.filter((name) => {
-        if (name.recipientName === props.name) {
-          return name;
-        }
-      });
+  // useEffect(() => {
 
-  console.log("chats", chats);
+  //   console.log("chats", chats);
+  //   if (active === false) {
+  //     setMessageFilter([]);
+  //   } else {
+  //     setMessageFilter([]);
+  //     setMessageFilter(chats);
+  //   }
+  // }, [active]);
 
   function toggleActive() {
     if (active === false) {
@@ -37,13 +38,23 @@ export default function Chat(props) {
     }
   }
 
-  console.log("messages state", messages);
+  // const yourMessages =
+  //   messageFilter == null
+  //     ? null
+  //     : messageFilter.map((message) => {
+  //         return (
+  //           <div>
+  //             <p>{message.message}</p>
+  //           </div>
+  //         );
+  //       });
+  // console.log("messages state", messages);
 
-  // console.log("DOES IT WORK???? MESSAGES FILTER????", filter);
   return (
     <div>
-      <p onClick={toggleActive}>{props.name}</p>
-      <myMessages message={props.messages} active={active} />
+      <a onClick={toggleActive}>{props.name}</a>
+
+      {/* <myMessages message={chats} active={active} /> */}
     </div>
   );
 }

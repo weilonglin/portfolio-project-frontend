@@ -107,7 +107,15 @@ export default function SideNav(props) {
     sender === null
       ? null
       : chatUsers.map((user) => {
-          return <Chat name={user} messages={{ sender }} data={{ data }} />;
+          const chats = loading
+            ? null
+            : data.user.sender.filter((name) => {
+                if (name.recipientName === user) {
+                  return name;
+                }
+              });
+          console.log("is there something in chats?", chats);
+          return <Chat name={user} messages={chats} data={{ data }} />;
         });
 
   return (
