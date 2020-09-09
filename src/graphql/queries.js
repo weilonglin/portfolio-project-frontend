@@ -48,6 +48,24 @@ export const GET_USER = gql`
   }
 `;
 
+export const GET_ALL_USERS = gql`
+  query allUsers {
+    allUsers {
+      userName
+      imageUrl
+    }
+  }
+`;
+
+export const GET_USER_IMAGES = gql`
+  query user($id: Int!) {
+    user(id: $id) {
+      userName
+      imageUrl
+    }
+  }
+`;
+
 export const GET_USER_IMAGE = gql`
   query user($id: Int!) {
     user(id: $id) {
@@ -61,6 +79,7 @@ export const GET_MESSAGES = gql`
     chatMessage(id: $id) {
       message
       imageUrl
+      imageUrlRecipient
       userId
       recipientId
       recipientName
@@ -200,6 +219,7 @@ export const SUB_MESSAGE = gql`
       message
       recipientId
       recipientName
+      imageUrlRecipient
     }
   }
 `;

@@ -3,7 +3,7 @@ import TinderCard from "react-tinder-card";
 import { useQuery } from "@apollo/react-hooks";
 import Button from "react-bootstrap/Button";
 
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { GET_ALL_DOGS, SEND_MESSAGE } from "../../graphql/queries";
 
 export default function Deck() {
@@ -31,16 +31,17 @@ export default function Deck() {
 
   const swiped = (direction, nameToDelete, userName, ownerId) => {
     setLastDirection(direction);
-
-    sendMessage({
-      variables: {
-        userId: parseInt(user),
-        message: `Hello ${userName}, I liked your dog ${nameToDelete}`,
-        recipientId: parseInt(ownerId),
-        recipientName: userName,
-        imageUrl: localStorage.getItem("useImg"),
-      },
-    });
+    if (direction == "right") {
+      sendMessage({
+        variables: {
+          userId: parseInt(user),
+          message: `Hello ${userName}, I liked your dog ${nameToDelete}`,
+          recipientId: parseInt(ownerId),
+          recipientName: userName,
+          imageUrl: localStorage.getItem("useImg"),
+        },
+      });
+    }
   };
 
   console.log("data all dogs", data.allDogs);
