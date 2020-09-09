@@ -92,6 +92,10 @@ export const GET_ALL_DOGS = gql`
       gender
       imageUrl
       tagLine
+      ownerId
+      owner {
+        userName
+      }
       tag {
         id
         name

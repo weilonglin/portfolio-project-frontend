@@ -154,6 +154,13 @@ export default function SideNav(props) {
   //         return <Chat name={user} messages={{ sender }} data={{ data }} />;
   //       });
   const userImage = data == undefined ? null : data.user.imageUrl;
+
+  useEffect(() => {
+    if (userImage !== null) {
+      localStorage.setItem("useImg", data.user.imageUrl);
+    }
+  }, [userImage]);
+
   const userName = data == undefined ? null : data.user.userName;
 
   const avatar =
