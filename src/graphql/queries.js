@@ -10,6 +10,7 @@ export const GET_USER = gql`
       email
       address
       city
+      imageUrl
       dogs {
         name
         gender
@@ -51,6 +52,18 @@ export const GET_USER_IMAGE = gql`
   query user($id: Int!) {
     user(id: $id) {
       image
+    }
+  }
+`;
+
+export const GET_MESSAGES = gql`
+  query chatMessage($id: Int!) {
+    chatMessage(id: $id) {
+      message
+      imageUrl
+      userId
+      recipientId
+      recipientName
     }
   }
 `;
