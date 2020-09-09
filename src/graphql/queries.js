@@ -10,6 +10,7 @@ export const GET_USER = gql`
       email
       address
       city
+      imageUrl
       dogs {
         name
         gender
@@ -51,6 +52,18 @@ export const GET_USER_IMAGE = gql`
   query user($id: Int!) {
     user(id: $id) {
       image
+    }
+  }
+`;
+
+export const GET_MESSAGES = gql`
+  query chatMessage($id: Int!) {
+    chatMessage(id: $id) {
+      message
+      imageUrl
+      userId
+      recipientId
+      recipientName
     }
   }
 `;
@@ -98,18 +111,26 @@ export const GET_ALL_DOG_IMAGE = gql`
 `;
 
 export const SEND_MESSAGE = gql`
-  mutation {
+  mutation sendMessage(
+    $userId: Int!
+    $message: String!
+    $recipientId: Int!
+    $recipientName: String!
+    $imageUrl: String
+  ) {
     sendMessage(
-      userId: 1
-      message: "Hello"
-      recipientId: 2
-      recipientName: "leo77"
+      userId: $userId
+      message: $message
+      recipientId: $recipientId
+      recipientName: $recipientName
+      imageUrl: $imageUrl
     ) {
       id
       userId
       message
       recipientId
       recipientName
+      imageUrl
     }
   }
 `;
