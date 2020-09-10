@@ -2,11 +2,11 @@
   position: absolute;
 }
 
-.cardContainer {
+/* .cardContainer {
   width: 90vw;
   max-width: 50vw;
   height: 300px;
-}
+} */
 
 .card {
   position: relative;

@@ -26,7 +26,7 @@ function App() {
             <DynamicRoute path="/login" component={Login} guest />
             <DynamicRoute path="/chat" component={Chat} />
             <DynamicRoute path="/signup" component={SignupUser} guest />
-            <DynamicRoute path="/add-dog" component={SignupDog} guest />
+            <DynamicRoute path="/add-dog" component={SignupDog} authenticated />
           </Switch>
         </Container>
       </AuthProvider>

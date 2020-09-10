@@ -18,7 +18,7 @@ export default function SignupUser(props) {
   const [errors, setErrors] = useState({});
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
-    update: (_, __) => props.history.push("/add-dog"),
+    update: (_, __) => props.history.push("/feed"),
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
   });
 

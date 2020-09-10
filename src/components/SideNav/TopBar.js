@@ -44,9 +44,7 @@ export default function TopBar() {
         <ListItemIcon>
           <Avatar className={classes.large} alt="This is me" src={userImage} />
         </ListItemIcon>
-        <ListItemText primary="My profile" style={{ padding: "10px" }}>
-          {" "}
-        </ListItemText>
+        <ListItemText primary="My profile"> </ListItemText>
       </ListItem>
 
       <Divider />
