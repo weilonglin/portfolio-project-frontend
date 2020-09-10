@@ -104,7 +104,7 @@ export const GET_ALL_MESSAGES = gql`
 `;
 
 export const GET_ALL_DOGS = gql`
-  query {
+  query allDogs {
     allDogs {
       id
       name
@@ -115,6 +115,22 @@ export const GET_ALL_DOGS = gql`
       owner {
         userName
       }
+      tag {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_ALL_USER_DOGS = gql`
+  query allDogsUser($id: Int!) {
+    allDogsUser(id: $id) {
+      id
+      name
+      gender
+      imageUrl
+      tagLine
       tag {
         id
         name
