@@ -312,10 +312,10 @@ export default function SideNav(props) {
             </Accordion>
           </AccordionDetails>
         </Accordion>
+        <ExitToAppIcon onClick={logout} className={classes.large}>
+          Log out
+        </ExitToAppIcon>
       </Grid>
-      <ExitToAppIcon onClick={logout} className={classes.large}>
-        Log out
-      </ExitToAppIcon>
     </>
   );
 }
