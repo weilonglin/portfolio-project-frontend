@@ -20,6 +20,7 @@ import {
   GET_MESSAGES,
   GET_USER_IMAGES,
   GET_ALL_USERS,
+  GET_ALL_USER_DOGS,
 } from "../../graphql/queries";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -30,8 +31,8 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-
-import { Row, Col, Form, Button } from "react-bootstrap";
+import ControlPointIcon from "@material-ui/icons/ControlPoint";
+import Button from "@material-ui/core/Button";
 
 import SignupDog from "../../pages/signupDog";
 
@@ -87,6 +88,19 @@ export default function SideNav(props) {
       },
     }
   );
+
+  const { loading: dogLoading, error: dogError, data: dogData } = useQuery(
+    GET_ALL_USER_DOGS,
+    {
+      variables: {
+        id: parseInt(user),
+      },
+    }
+  );
+
+  const myDogs =
+    dogData === null || dogData === undefined ? null : dogData.allDogsUser;
+  console.log("my dogs", myDogs);
 
   const { loading: allLoading, error: allError, data: allData } = useQuery(
     GET_ALL_USERS
@@ -262,7 +276,35 @@ export default function SideNav(props) {
             );
           }
         });
+  console.log("avatar2", avatar2);
 
+  const dogAvatar =
+    myDogs === null || myDogs === undefined
+      ? null
+      : myDogs.map((dog) => {
+          return (
+            <Avatar
+              alt="Remy Sharp"
+              src={dog.imageUrl}
+              className={classes.large}
+            />
+          );
+        });
+  const dogAvatar2 =
+    myDogs === null || myDogs === undefined
+      ? null
+      : myDogs.map((dog) => {
+          return (
+            <Chat
+              src={dog.imageUrl}
+              name={dog.name}
+              id={dog.id}
+              tagLine={dog.tagLin}
+              data={dog}
+              myId={user}
+            />
+          );
+        });
   return (
     <>
       <Grid className={classes.root} xs={2}>
@@ -271,7 +313,15 @@ export default function SideNav(props) {
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
             <Typography className={classes.heading}>
-              <AvatarGroup max={4}>{avatar2}</AvatarGroup>
+              {avatar2 === null ? (
+                "No messages"
+              ) : avatar2 === [] ? (
+                "No messages"
+              ) : avatar2.length === 0 ? (
+                "No messages"
+              ) : (
+                <AvatarGroup max={4}>{avatar2}</AvatarGroup>
+              )}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -284,28 +334,27 @@ export default function SideNav(props) {
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
             <Typography className={classes.heading}>
-              <AvatarGroup max={4}>Dogs</AvatarGroup>
+              <AvatarGroup max={3}>{dogAvatar}</AvatarGroup>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Accordion className={classes.spread}>
-              <AccordionSummary>
-                <Typography>
-                  <List>
-                    <ListItem>
-                      <ListItemIcon>
-                        <Avatar
-                          alt="Add dog"
-                          src="https://www.materialui.co/materialIcons/content/add_circle_grey_192x192.png"
-                        />
-                      </ListItemIcon>
-                      <ListItemText primary="add dog">Add dog</ListItemText>
-                    </ListItem>
-                  </List>
-                </Typography>
-              </AccordionSummary>
               <AccordionDetails>
-                <Typography>Add dog feature</Typography>
+                <Button
+                  variant="contained"
+                  style={{
+                    borderRadius: 35,
+                    background: "linear-gradient(262deg, #ff7854, #fd267d)",
+                    fontSize: "18px",
+                  }}
+                  size="large"
+                  className={classes.button}
+                  startIcon={<ControlPointIcon />}
+                  color="primary"
+                  onClick={AddDog}
+                >
+                  Add dog
+                </Button>
               </AccordionDetails>
             </Accordion>
           </AccordionDetails>

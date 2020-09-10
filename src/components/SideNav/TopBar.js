@@ -49,7 +49,7 @@ export default function TopBar() {
           <Avatar className={classes.large} alt="This is me" src={userImage} />
         </ListItemIcon>
         <ListItemText className={classes.title}>
-          <h3>My profile</h3>{" "}
+          <h2>My profile</h2>{" "}
         </ListItemText>
       </ListItem>
 
