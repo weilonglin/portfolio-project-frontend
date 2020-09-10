@@ -42,10 +42,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Chat(props) {
-  const image2 = props.src === null ? null : props.src[0];
+  const image2 =
+    props.src === null || props.src === undefined ? null : props.src.imageUrl;
   const name2 = props.name === null ? null : props.name.recipientName;
   const id2 = props.id === null ? null : props.id;
-
+  const userImage = localStorage.getItem("useImg");
   console.log("src prop", image2);
   console.log("msg prop", props.messages);
   console.log("data prop", props.subData);
@@ -105,7 +106,7 @@ export default function Chat(props) {
                         <ListItemIcon>
                           <Avatar
                             alt="Cindy Baker"
-                            src={props.myImage}
+                            src={userImage}
                             align="right"
                           />
                         </ListItemIcon>

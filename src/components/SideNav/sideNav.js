@@ -14,6 +14,8 @@ import {
   SUB_MESSAGE,
   GET_USER_IMAGE,
   GET_MESSAGES,
+  GET_USER_IMAGES,
+  GET_ALL_USERS,
 } from "../../graphql/queries";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,6 +24,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +64,13 @@ export default function SideNav(props) {
       },
     }
   );
+
+  const { loading: allLoading, error: allError, data: allData } = useQuery(
+    GET_ALL_USERS
+  );
+
+  const allUserImagesNames =
+    allData === undefined || allData === null ? null : allData.allUsers;
   const msgT = msgData === undefined ? null : msgData["chatMessage"];
 
   const {
@@ -74,6 +84,8 @@ export default function SideNav(props) {
     },
   });
 
+  const [getImages, { loading: lazyLoading }] = useLazyQuery(GET_USER_IMAGES);
+
   const dispatch = useAuthDispatch();
   const history = useHistory();
 
@@ -83,23 +95,18 @@ export default function SideNav(props) {
   };
 
   function getUnique(arr, comp) {
-    // store the comparison  values in array
     const unique =
       msgT === undefined || msgT === null
         ? null
         : arr
             .map((e) => e[comp])
-
-            // store the indexes of the unique objects
             .map((e, i, final) => final.indexOf(e) === i && i)
-
-            // eliminate the false indexes & return unique objects
             .filter((e) => arr[e])
             .map((e) => arr[e]);
 
     return unique;
   }
-
+  const loadingor = loading === null || undefined ? false : true;
   useEffect(() => {
     const chats =
       msgT === undefined || msgT === null
@@ -108,14 +115,12 @@ export default function SideNav(props) {
             return name.recipientName + name.recipientId;
           });
 
-    // console.log("ASDASDASDASDASASDASD", getUnique(msgT, "recipientName"));
     const filtered = getUnique(msgT, "recipientName");
-    // console.log("filtered?", filtered);
-    setAllnames(filtered);
 
+    setAllnames(filtered);
+    console.log("filtered names", filtered);
     setSender(msgT);
-  }, [msgData]);
-  // const subData = sloading ? null :
+  }, [msgData, subData, loadingor]);
 
   useEffect(() => {
     const subChat = subLoading ? null : subData.chatMessage;
@@ -123,47 +128,27 @@ export default function SideNav(props) {
 
     const newNames = [...allNames, subChat];
     const newMessage = [...sender, subMessages];
-    // console.log("newNames", newNames);
-    // console.log("newMessage", newMessage);
-    // console.log("ASDASDASDASDASASDASD", getUnique(newNames, "recipientName"));
     const filtered = getUnique(newNames, "recipientName");
-    // console.log("filtered?", filtered);
 
-    setAllnames(newNames);
-    // console.log("allNames", allNames);
+    setAllnames(filtered);
+
     setSender(newMessage);
   }, [subData]);
 
-  // useEffect(() => {
-  //   console.log("allNames", allNames);
-  //   const names =
-  //     allNames === null || allNames === undefined
-  //       ? null
-  //       : allNames.map((name) => {
-  //           console.log("name??????", name);
-  //           return name.recipientName;
-  //         });
-  //   console.log("filter names", allNames);
-  //   setChatUsers(names);
-  // }, [allNames]);
-
-  // const avatar =
-  //   chatUsers === null
-  //     ? null
-  //     : chatUsers.map((user) => {
-  //         return <Chat name={user} messages={{ sender }} data={{ data }} />;
-  //       });
   const userImage = data == undefined ? null : data.user.imageUrl;
+
+  useEffect(() => {
+    if (userImage !== null) {
+      localStorage.setItem("useImg", data.user.imageUrl);
+    }
+  }, [userImage]);
+
   const userName = data == undefined ? null : data.user.userName;
 
   const avatar =
     allNames === null || allNames === undefined
       ? null
       : allNames.map((user) => {
-          // console.log("chatUsers", allNames);
-          // console.log("sender", sender);
-          // console.log("user recipientname", user);
-
           const chatsSender =
             loading ||
             data == undefined ||
@@ -171,8 +156,18 @@ export default function SideNav(props) {
             sender === undefined
               ? null
               : sender.filter((name) => {
+                  const nameM =
+                    name.recipientName === null ||
+                    name.recipientName === undefined
+                      ? null
+                      : name.recipientName;
+                  const userM =
+                    user.recipientName === null ||
+                    user.recipientName === undefined
+                      ? null
+                      : user.recipientName;
                   if (
-                    name.recipientName === user.recipientName ||
+                    nameM === userM ||
                     parseInt(name.userId) === parseInt(user.recipientId)
                   ) {
                     return name;
@@ -180,30 +175,34 @@ export default function SideNav(props) {
                 });
 
           const image =
-            chatsSender == null
+            allUserImagesNames == null
               ? null
-              : chatsSender.map((chat) => {
-                  return chat.imageUrl;
+              : allUserImagesNames.find((chat) => {
+                  const senderName =
+                    chatsSender === null ? null : user.recipientName;
+                  if (chat.userName === senderName) {
+                    return chat;
+                  }
                 });
+          const image3 = image === null ? null : image;
 
-          if (user !== userName) {
-            console.log("user id?", user.recipientId);
+          const user3 =
+            image === null || image === undefined ? null : image.userName;
+          console.log("image 3333333", user3);
+
+          if (user3 !== userName) {
             return (
               <Chat
-                src={image}
+                src={image3}
                 name={user}
                 id={user.recipientId}
                 messages={chatsSender}
                 data={subData}
-                myImage={userImage}
                 myName={userName}
-                // myPic={data.user.imageUrl}
               />
             );
           }
         });
-
-  console.log("avatar", avatar);
 
   const avatar2 =
     allNames === null || allNames === undefined
@@ -217,25 +216,30 @@ export default function SideNav(props) {
                     name.recipientName === user.recipientName ||
                     parseInt(name.userId) === parseInt(user.recipientId)
                   ) {
-                    console.log("nameasdasdasdasd", name);
                     return name;
                   }
                 });
           const image =
-            chatsSender == null
+            allUserImagesNames == null
               ? null
-              : chatsSender.map((chat) => {
-                  console.log("chatsSender", chat.recipientName);
-                  console.log("chatsender and user???", user);
-                  if (chat.recipientName === user.recipientName) {
-                    console.log("CHAT MAP IMAGE", chat);
-                    return chat.imageUrl;
+              : allUserImagesNames.find((chat) => {
+                  const recName =
+                    user === null || user === undefined
+                      ? null
+                      : user.recipientName;
+                  if (chat.userName === recName) {
+                    return chat;
                   }
                 });
+          const image3 = image === null ? null : image.imageUrl;
+          const user3 = image === null ? null : image.userName;
+          console.log("image 3333333", image);
 
-          return (
-            <Avatar alt="Remy Sharp" src={image} className={classes.large} />
-          );
+          if (user3 !== userName) {
+            return (
+              <Avatar alt="Remy Sharp" src={image3} className={classes.large} />
+            );
+          }
         });
 
   return (
@@ -247,7 +251,7 @@ export default function SideNav(props) {
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
             <Typography className={classes.heading}>
-              <AvatarGroup max={7}>{avatar2}</AvatarGroup>
+              <AvatarGroup max={4}>{avatar2}</AvatarGroup>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -255,9 +259,7 @@ export default function SideNav(props) {
           </AccordionDetails>
         </Accordion>
       </div>
-      <button className="signOutButton" onClick={logout}>
-        Log out
-      </button>
+      <ExitToAppIcon onClick={logout}>Log out</ExitToAppIcon>
     </div>
   );
 }

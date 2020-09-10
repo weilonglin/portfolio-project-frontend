@@ -18,8 +18,7 @@ function App() {
   return (
     <Grid container direction="column">
       <AuthProvider>
-        <Container className="pt-5">
-          <NavBar />
+        <Container>
           <Switch>
             <DynamicRoute exact path="/" component={Homepage} guest />
             <DynamicRoute path="/feed" component={Feed} authenticated />
@@ -27,7 +26,7 @@ function App() {
             <DynamicRoute path="/login" component={Login} guest />
             <DynamicRoute path="/chat" component={Chat} />
             <DynamicRoute path="/signup" component={SignupUser} guest />
-            <DynamicRoute path="/add-dog" component={SignupDog} authenticated />
+            <DynamicRoute path="/add-dog" component={SignupDog} guest />
           </Switch>
         </Container>
       </AuthProvider>
