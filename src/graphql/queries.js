@@ -208,6 +208,7 @@ export const LOGIN_USER = gql`
     login(userName: $userName, password: $password) {
       userName
       email
+      imageUrl
       token
     }
   }

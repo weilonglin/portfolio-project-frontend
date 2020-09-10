@@ -47,12 +47,6 @@ export default function Chat(props) {
   const name2 = props.name === null ? null : props.name.recipientName;
   const id2 = props.id === null ? null : props.id;
   const userImage = localStorage.getItem("useImg");
-  console.log("src prop", image2);
-  console.log("msg prop", props.messages);
-  console.log("data prop", props.subData);
-  console.log("myImage prop", props.myImage);
-  console.log("myName", props.myName);
-
   const [active, setActive] = useState(false);
   const [messages, setMessages] = useState([]);
   const classes = useStyles();

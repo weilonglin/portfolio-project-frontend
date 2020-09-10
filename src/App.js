@@ -13,6 +13,7 @@ import Chat from "./pages/details";
 import { AuthProvider } from "./context/auth";
 import DynamicRoute from "./dynamicRoute";
 import { Grid } from "@material-ui/core";
+import "./App.css";
 
 function App() {
   return (

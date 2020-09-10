@@ -141,7 +141,7 @@ export default function SideNav(props) {
     const filtered = getUnique(msgT, "recipientName");
 
     setAllnames(filtered);
-    console.log("filtered names", filtered);
+
     setSender(msgT);
   }, [msgData, subData, loadingor]);
 
@@ -211,7 +211,6 @@ export default function SideNav(props) {
 
           const user3 =
             image === null || image === undefined ? null : image.userName;
-          console.log("image 3333333", user3);
 
           if (user3 !== userName) {
             return (
@@ -256,7 +255,6 @@ export default function SideNav(props) {
                 });
           const image3 = image === null ? null : image.imageUrl;
           const user3 = image === null ? null : image.userName;
-          console.log("image 3333333", image);
 
           if (user3 !== userName) {
             return (
