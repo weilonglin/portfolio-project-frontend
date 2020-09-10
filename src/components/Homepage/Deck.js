@@ -10,7 +10,6 @@ export default function Deck() {
 
   if (loading) return "Loading...";
   if (error) return <p>Error! ${error.message}</p>;
-  console.log("data", data.allDogs);
 
   const db = data;
   const characters = db;
@@ -29,7 +28,7 @@ export default function Deck() {
         {data.allDogs.map((character) => (
           <TinderCard
             className="swipe"
-            key={character.id}
+            key={character.name}
             onSwipe={(dir) => swiped(dir, character.name)}
             onCardLeftScreen={() => outOfFrame(character.name)}
           >

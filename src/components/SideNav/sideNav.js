@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import TopBar from "./TopBar";
-import "./sideNav.css";
+
 import Chat from "../Chat/Chat";
 import { useAuthDispatch } from "../../context/auth";
 import { useHistory, Link } from "react-router-dom";
 import decode from "jwt-decode";
 import { GET_USER } from "../../graphql/queries";
 import { useQuery, useSubscription, useLazyQuery } from "@apollo/react-hooks";
-import { Avatar, classes } from "@material-ui/core";
+import { Avatar, classes, Grid } from "@material-ui/core";
 import { array } from "prop-types";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import List from "@material-ui/core/List";
 import {
   SUB_MESSAGE,
   GET_USER_IMAGE,
@@ -25,12 +29,28 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+
+import { Row, Col, Form, Button } from "react-bootstrap";
+
+import SignupDog from "../../pages/signupDog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+
+    alignItems: "top",
+    height: "100%",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    background: "white",
+  },
+  spread: {
+    width: "100%",
   },
   heading: {
+    padding: "10px",
     fontSize: theme.typography.pxToRem(20),
     fontWeight: theme.typography.fontWeightRegular,
   },
@@ -55,6 +75,9 @@ export default function SideNav(props) {
       id: parseInt(user),
     },
   });
+  const AddDog = () => {
+    history.push("/add-dog");
+  };
 
   const { loading: msgLoading, error: msgError, data: msgData } = useQuery(
     GET_MESSAGES,
@@ -118,7 +141,7 @@ export default function SideNav(props) {
     const filtered = getUnique(msgT, "recipientName");
 
     setAllnames(filtered);
-    console.log("filtered names", filtered);
+
     setSender(msgT);
   }, [msgData, subData, loadingor]);
 
@@ -188,7 +211,6 @@ export default function SideNav(props) {
 
           const user3 =
             image === null || image === undefined ? null : image.userName;
-          console.log("image 3333333", user3);
 
           if (user3 !== userName) {
             return (
@@ -233,7 +255,6 @@ export default function SideNav(props) {
                 });
           const image3 = image === null ? null : image.imageUrl;
           const user3 = image === null ? null : image.userName;
-          console.log("image 3333333", image);
 
           if (user3 !== userName) {
             return (
@@ -243,10 +264,9 @@ export default function SideNav(props) {
         });
 
   return (
-    <div className="sidenav">
-      <TopBar />
-
-      <div className={classes.root}>
+    <>
+      <Grid className={classes.root} xs={2}>
+        <TopBar />
         <Typography className={classes.heading}>My messages</Typography>
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
@@ -255,11 +275,45 @@ export default function SideNav(props) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>{avatar == undefined ? null : avatar}</Typography>
+            <Typography className={classes.spread}>
+              {avatar == undefined ? null : avatar}
+            </Typography>
           </AccordionDetails>
         </Accordion>
-      </div>
-      <ExitToAppIcon onClick={logout}>Log out</ExitToAppIcon>
-    </div>
+        <Typography className={classes.heading}>My dogs</Typography>
+        <Accordion>
+          <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
+            <Typography className={classes.heading}>
+              <AvatarGroup max={4}>Dogs</AvatarGroup>
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Accordion className={classes.spread}>
+              <AccordionSummary>
+                <Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon>
+                        <Avatar
+                          alt="Add dog"
+                          src="https://www.materialui.co/materialIcons/content/add_circle_grey_192x192.png"
+                        />
+                      </ListItemIcon>
+                      <ListItemText primary="add dog">Add dog</ListItemText>
+                    </ListItem>
+                  </List>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>Add dog feature</Typography>
+              </AccordionDetails>
+            </Accordion>
+          </AccordionDetails>
+        </Accordion>
+        <ExitToAppIcon onClick={logout} className={classes.large}>
+          Log out
+        </ExitToAppIcon>
+      </Grid>
+    </>
   );
 }

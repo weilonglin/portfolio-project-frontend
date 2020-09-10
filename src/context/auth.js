@@ -1,20 +1,23 @@
 import React, { createContext, useReducer, useContext } from "react";
 import jwtDecode from "jwt-decode";
 import { GET_USER } from "../graphql/queries";
+import { useHistory } from "react-router-dom";
 
 const AuthStateContext = createContext();
 const AuthDispatchContext = createContext();
 
 let user = null;
 const token = localStorage.getItem("token");
+
 if (token) {
   const decodedToken = jwtDecode(token);
-  console.log("decoded token", decodedToken.id);
+
   const expiresAt = new Date(decodedToken.exp * 1000);
   localStorage.setItem("user", decodedToken.id);
   if (new Date() > expiresAt) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("useImg");
   } else {
     user = decodedToken;
   }
@@ -25,6 +28,7 @@ const authReducer = (state, action) => {
     case "LOGIN":
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("user", action.payload.id);
+      localStorage.setItem("useImg", action.payload.imageUrl);
       return {
         ...state,
         user: action.payload,
@@ -32,6 +36,7 @@ const authReducer = (state, action) => {
     case "LOGOUT":
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      localStorage.removeItem("useImg");
       return {
         ...state,
         user: null,

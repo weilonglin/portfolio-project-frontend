@@ -13,6 +13,7 @@ import Chat from "./pages/details";
 import { AuthProvider } from "./context/auth";
 import DynamicRoute from "./dynamicRoute";
 import { Grid } from "@material-ui/core";
+import "./App.css";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
             <DynamicRoute path="/login" component={Login} guest />
             <DynamicRoute path="/chat" component={Chat} />
             <DynamicRoute path="/signup" component={SignupUser} guest />
-            <DynamicRoute path="/add-dog" component={SignupDog} guest />
+            <DynamicRoute path="/add-dog" component={SignupDog} authenticated />
           </Switch>
         </Container>
       </AuthProvider>

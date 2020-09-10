@@ -166,6 +166,7 @@ export const REGISTER_USER = gql`
     $password: String!
     $address: String!
     $city: String!
+    $imageUrl: String!
   ) {
     register(
       full_name: $full_name
@@ -174,6 +175,7 @@ export const REGISTER_USER = gql`
       password: $password
       address: $address
       city: $city
+      imageUrl: $imageUrl
     ) {
       userName
       email
@@ -206,6 +208,7 @@ export const LOGIN_USER = gql`
     login(userName: $userName, password: $password) {
       userName
       email
+      imageUrl
       token
     }
   }

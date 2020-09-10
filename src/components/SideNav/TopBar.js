@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(9),
     height: theme.spacing(9),
   },
+  title: {
+    color: "white",
+    marginLeft: "10px",
+  },
 }));
 
 export default function TopBar() {
@@ -44,8 +48,8 @@ export default function TopBar() {
         <ListItemIcon>
           <Avatar className={classes.large} alt="This is me" src={userImage} />
         </ListItemIcon>
-        <ListItemText primary="My profile" style={{ padding: "10px" }}>
-          {" "}
+        <ListItemText className={classes.title}>
+          <h3>My profile</h3>{" "}
         </ListItemText>
       </ListItem>
 

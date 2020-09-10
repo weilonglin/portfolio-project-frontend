@@ -47,12 +47,6 @@ export default function Chat(props) {
   const name2 = props.name === null ? null : props.name.recipientName;
   const id2 = props.id === null ? null : props.id;
   const userImage = localStorage.getItem("useImg");
-  console.log("src prop", image2);
-  console.log("msg prop", props.messages);
-  console.log("data prop", props.subData);
-  console.log("myImage prop", props.myImage);
-  console.log("myName", props.myName);
-
   const [active, setActive] = useState(false);
   const [messages, setMessages] = useState([]);
   const classes = useStyles();
@@ -92,51 +86,41 @@ export default function Chat(props) {
     messages === null
       ? null
       : messages.map((message) => {
-          if (parseInt(message.userId) === parseInt(user)) {
-            return (
-              <div>
-                <ListItem key="1">
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <ListItem button key="CindyBaker">
-                        <ListItemText
-                          align="right"
-                          primary={message.message}
-                        ></ListItemText>
-                        <ListItemIcon>
-                          <Avatar
-                            alt="Cindy Baker"
-                            src={userImage}
-                            align="right"
-                          />
-                        </ListItemIcon>
-                      </ListItem>
-                    </Grid>
+          return (
+            <div>
+              <ListItem key="1">
+                <Grid container>
+                  <Grid item xs={12}>
+                    <ListItem button key="CindyBaker">
+                      <ListItemText
+                        align={
+                          parseInt(message.userId) === parseInt(user)
+                            ? "right"
+                            : "left"
+                        }
+                        primary={message.message}
+                      ></ListItemText>
+                      <ListItemIcon>
+                        <Avatar
+                          alt="Cindy Baker"
+                          src={
+                            parseInt(message.userId) === parseInt(user)
+                              ? userImage
+                              : image2
+                          }
+                          align={
+                            parseInt(message.userId) === parseInt(user)
+                              ? "right"
+                              : "left"
+                          }
+                        />
+                      </ListItemIcon>
+                    </ListItem>
                   </Grid>
-                </ListItem>
-              </div>
-            );
-          } else {
-            return (
-              <div>
-                <ListItem key="1">
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <ListItem button key="CindyBaker">
-                        <ListItemIcon>
-                          <Avatar alt="Cindy Baker" src={image2} align="left" />
-                        </ListItemIcon>
-                        <ListItemText
-                          align="left"
-                          primary={message.message}
-                        ></ListItemText>
-                      </ListItem>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-              </div>
-            );
-          }
+                </Grid>
+              </ListItem>
+            </div>
+          );
         });
 
   const list = (anchor) => (

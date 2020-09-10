@@ -6,13 +6,14 @@ import { REGISTER_DOG } from "../../graphql/queries";
 import { useMutation } from "@apollo/react-hooks";
 
 export default function SignupDog(props) {
+  const id = localStorage.getItem("user");
   const history = useHistory;
   const [variables, setVariables] = useState({
     name: "",
     gender: "",
     imageUrl: "",
     tagLine: "",
-    ownerId: 4,
+    ownerId: parseInt(id),
   });
   const [errors, setErrors] = useState({});
 
