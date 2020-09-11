@@ -100,20 +100,7 @@ export default function SignupDog(props) {
                 name="Gender"
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                value={variables.email}
-                onChange={(e) =>
-                  setVariables({ ...variables, email: e.target.value })
-                }
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -149,7 +136,7 @@ export default function SignupDog(props) {
             fullWidth
             className={classes.submit}
           >
-            {loading ? "loading.." : "Register"}
+            {loading ? "loading.." : "Add dog"}
           </Button>
 
           <Grid container justify="flex-end">
