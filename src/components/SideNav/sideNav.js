@@ -105,9 +105,10 @@ export default function SideNav(props) {
   const { loading: allLoading, error: allError, data: allData } = useQuery(
     GET_ALL_USERS
   );
-
+  console.log("allUsers", allData);
   const allUserImagesNames =
     allData === undefined || allData === null ? null : allData.allUsers;
+
   const msgT = msgData === undefined ? null : msgData["chatMessage"];
 
   const {
@@ -149,15 +150,18 @@ export default function SideNav(props) {
       msgT === undefined || msgT === null
         ? null
         : msgT.map((name) => {
-            return name.recipientName + name.recipientId;
+            return name.recipientName + name.recipientId + name.userId;
           });
 
-    const filtered = getUnique(msgT, "recipientName");
+    const filtered = getUnique(msgT, "recipientId");
+    const filtered2 = getUnique(msgT, "userId");
 
-    setAllnames(filtered);
+    const mergethis = [].concat(filtered, filtered2);
+
+    setAllnames(mergethis);
 
     setSender(msgT);
-  }, [msgData, subData, loadingor]);
+  }, [msgData, subData, loading, data]);
 
   useEffect(() => {
     const subChat = subLoading ? null : subData.chatMessage;
@@ -165,9 +169,12 @@ export default function SideNav(props) {
 
     const newNames = [...allNames, subChat];
     const newMessage = [...sender, subMessages];
-    const filtered = getUnique(newNames, "recipientName");
+    const filtered = getUnique(newNames, "recipientId");
+    const filtered2 = getUnique(newNames, "userId");
 
-    setAllnames(filtered);
+    const mergethis = [].concat(filtered, filtered2);
+
+    setAllnames(mergethis);
 
     setSender(newMessage);
   }, [subData]);
@@ -194,18 +201,20 @@ export default function SideNav(props) {
               ? null
               : sender.filter((name) => {
                   const nameM =
-                    name.recipientName === null ||
-                    name.recipientName === undefined
+                    name.recipientId === null || name.recipientId === undefined
                       ? null
-                      : name.recipientName;
+                      : name.recipientId;
                   const userM =
-                    user.recipientName === null ||
-                    user.recipientName === undefined
+                    user.recipientId === null || user.recipientId === undefined
                       ? null
-                      : user.recipientName;
+                      : user.recipientId;
+                  const userM2 =
+                    name.recipientId === null || name.recipientId === undefined
+                      ? null
+                      : name.recipientId;
                   if (
                     nameM === userM ||
-                    parseInt(name.userId) === parseInt(user.recipientId)
+                    parseInt(nameM) === parseInt(user.recipientId)
                   ) {
                     return name;
                   }
@@ -217,10 +226,12 @@ export default function SideNav(props) {
               : allUserImagesNames.find((chat) => {
                   const senderName =
                     chatsSender === null ? null : user.recipientName;
+
                   if (chat.userName === senderName) {
                     return chat;
                   }
                 });
+
           const image3 = image === null ? null : image;
 
           const user3 =
@@ -244,26 +255,17 @@ export default function SideNav(props) {
     allNames === null || allNames === undefined
       ? null
       : allNames.map((user) => {
-          const chatsSender =
-            loading || data == undefined
-              ? null
-              : sender.filter((name) => {
-                  if (
-                    name.recipientName === user.recipientName ||
-                    parseInt(name.userId) === parseInt(user.recipientId)
-                  ) {
-                    return name;
-                  }
-                });
           const image =
             allUserImagesNames == null
               ? null
               : allUserImagesNames.find((chat) => {
                   const recName =
-                    user === null || user === undefined
-                      ? null
-                      : user.recipientName;
-                  if (chat.userName === recName) {
+                    user === null || user === undefined ? null : user;
+
+                  if (
+                    chat.id === recName.userId ||
+                    chat.id === recName.recipientId
+                  ) {
                     return chat;
                   }
                 });
@@ -276,7 +278,6 @@ export default function SideNav(props) {
             );
           }
         });
-  console.log("avatar2", avatar2);
 
   const dogAvatar =
     myDogs === null || myDogs === undefined
@@ -325,9 +326,7 @@ export default function SideNav(props) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography className={classes.spread}>
-              {avatar == undefined ? null : avatar}
-            </Typography>
+            <Typography className={classes.spread}>{avatar}</Typography>
           </AccordionDetails>
         </Accordion>
         <Typography className={classes.heading}>My dogs</Typography>
