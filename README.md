@@ -1,9 +1,7 @@
 # Dog Tinder
 
 <img width="500px" src="./homepage.png"/>
-<img width="500px" src="./feed.png"/>
-<img width="500px" src="./expanding.png"/>
-<img width="500px" src="./userchat.png"/>
+<img width="500px" src="./ani3.gif"/>
 
 ### Tech
 
