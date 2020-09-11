@@ -1,5 +1,11 @@
 # Dog Tinder
 
+### Tech
+
+## Backend: Apollo-graphql, express, PostgreSQL, sequelize
+
+## Frontend: React, apollo-react, graphQL, materialize-ui, react-router-dom, react-context
+
 ## Wireframe
 
 <img src="./Homepage_&_signup.png"/>
