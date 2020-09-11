@@ -7,6 +7,8 @@
 
 #### Backend: Apollo-graphql, express, PostgreSQL, sequelize
 
+[Click here to view backend repo](https://github.com/weilonglin/portfolio-project-backend)
+
 #### Frontend: React, apollo-react, graphQL, materialize-ui, react-router-dom, react-context
 
 ## Links
