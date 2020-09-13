@@ -53,6 +53,7 @@ export const GET_ALL_USERS = gql`
     allUsers {
       userName
       imageUrl
+      id
     }
   }
 `;
@@ -62,6 +63,7 @@ export const GET_USER_IMAGES = gql`
     user(id: $id) {
       userName
       imageUrl
+      id
     }
   }
 `;
@@ -83,6 +85,16 @@ export const GET_MESSAGES = gql`
       userId
       recipientId
       recipientName
+      sender {
+        id
+        userName
+        imageUrl
+      }
+      recipient {
+        id
+        userName
+        imageUrl
+      }
     }
   }
 `;
@@ -239,6 +251,16 @@ export const SUB_MESSAGE = gql`
       recipientId
       recipientName
       imageUrlRecipient
+      sender {
+        id
+        userName
+        imageUrl
+      }
+      recipient {
+        id
+        userName
+        imageUrl
+      }
     }
   }
 `;
