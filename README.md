@@ -5,6 +5,12 @@
 <img width="500px" src="./homepage.png"/>
 <img width="500px" src="./ani3.gif"/>
 
+### Todo:
+ - Move logic out of components
+ - Make a "loading" component, 
+ - Feed page shows a loading screen
+ - Get rid of all the ternary operators...
+
 ### Tech
 
 **Backend**
