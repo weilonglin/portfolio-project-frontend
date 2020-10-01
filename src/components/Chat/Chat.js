@@ -43,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Chat(props) {
   const image2 =
-    props.src === null || props.src === undefined ? null : props.src.imageUrl;
-  const name2 = props.name === null ? null : props.name.recipientName;
+    props.src === null || props.src === undefined ? null : props.src;
+  const name2 = props.name === null ? null : props.name;
   const id2 = props.id === null ? null : props.id;
   const userImage = localStorage.getItem("useImg");
   const [active, setActive] = useState(false);

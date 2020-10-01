@@ -88,7 +88,7 @@ export default function SideNav(props) {
       },
     }
   );
-
+  console.log("msgdata", msgData);
   const { loading: dogLoading, error: dogError, data: dogData } = useQuery(
     GET_ALL_USER_DOGS,
     {
@@ -121,7 +121,9 @@ export default function SideNav(props) {
     },
   });
 
-  const [getImages, { loading: lazyLoading }] = useLazyQuery(GET_USER_IMAGES);
+  // const { loading: imgLoading, error: imgError, data: imgData } = useQuery(
+  //   GET_USER_IMAGES
+  // );
 
   const dispatch = useAuthDispatch();
   const history = useHistory();
@@ -166,7 +168,8 @@ export default function SideNav(props) {
     const newNames = [...allNames, subChat];
     const newMessage = [...sender, subMessages];
     const filtered = getUnique(newNames, "recipientName");
-
+    console.log("subData", subData);
+    console.log("filtered", filtered);
     setAllnames(filtered);
 
     setSender(newMessage);
@@ -211,27 +214,29 @@ export default function SideNav(props) {
                   }
                 });
 
-          const image =
-            allUserImagesNames == null
-              ? null
-              : allUserImagesNames.find((chat) => {
-                  const senderName =
-                    chatsSender === null ? null : user.recipientName;
-                  if (chat.userName === senderName) {
-                    return chat;
-                  }
-                });
-          const image3 = image === null ? null : image;
-
-          const user3 =
-            image === null || image === undefined ? null : image.userName;
-
-          if (user3 !== userName) {
+          if (
+            user.userId !== parseInt(userId) &&
+            user.recipient.id === parseInt(userId)
+          ) {
             return (
               <Chat
-                src={image3}
-                name={user}
-                id={user.recipientId}
+                src={user.sender.imageUrl}
+                name={user.sender.userName}
+                id={user.sender.id}
+                messages={chatsSender}
+                data={subData}
+                myName={userName}
+              />
+            );
+          } else if (
+            user.recipientId !== parseInt(userId) &&
+            user.recipient.id !== parseInt(userId)
+          ) {
+            return (
+              <Chat
+                src={user.recipient.imageUrl}
+                name={user.recipient.userName}
+                id={user.recipient.id}
                 messages={chatsSender}
                 data={subData}
                 myName={userName}
@@ -244,35 +249,28 @@ export default function SideNav(props) {
     allNames === null || allNames === undefined
       ? null
       : allNames.map((user) => {
-          const chatsSender =
-            loading || data == undefined
-              ? null
-              : sender.filter((name) => {
-                  if (
-                    name.recipientName === user.recipientName ||
-                    parseInt(name.userId) === parseInt(user.recipientId)
-                  ) {
-                    return name;
-                  }
-                });
-          const image =
-            allUserImagesNames == null
-              ? null
-              : allUserImagesNames.find((chat) => {
-                  const recName =
-                    user === null || user === undefined
-                      ? null
-                      : user.recipientName;
-                  if (chat.userName === recName) {
-                    return chat;
-                  }
-                });
-          const image3 = image === null ? null : image.imageUrl;
-          const user3 = image === null ? null : image.userName;
-
-          if (user3 !== userName) {
+          console.log("user", user);
+          if (
+            user.userId !== parseInt(userId) &&
+            user.recipient.id === parseInt(userId)
+          ) {
             return (
-              <Avatar alt="Remy Sharp" src={image3} className={classes.large} />
+              <Avatar
+                alt="Remy Sharp"
+                src={user.sender.imageUrl}
+                className={classes.large}
+              />
+            );
+          } else if (
+            user.recipientId !== parseInt(userId) &&
+            user.recipient.id !== parseInt(userId)
+          ) {
+            return (
+              <Avatar
+                alt="Remy Sharp"
+                src={user.recipient.imageUrl}
+                className={classes.large}
+              />
             );
           }
         });

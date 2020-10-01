@@ -13,7 +13,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: "https://dogtinder-portfolio.herokuapp.com/graphql",
+  uri: "http://localhost:4000/graphql",
 });
 const token = localStorage.getItem("token");
 const authLink = setContext((_, { headers }) => {
