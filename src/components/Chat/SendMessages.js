@@ -28,15 +28,17 @@ export default function SendMessages(props) {
   return (
     <Grid container style={{ padding: "20px" }}>
       <Grid item xs={11}>
-        <TextField
-          id="outlined-basic-email"
-          label="Type Something..."
-          fullWidth
-          value={variables.message}
-          onChange={(e) =>
-            setVariables({ ...variables, message: e.target.value })
-          }
-        />
+        <form onSubmit={submitMessage}>
+          <TextField
+            id="outlined-basic-email"
+            label="Type Something..."
+            fullWidth
+            value={variables.message}
+            onChange={(e) =>
+              setVariables({ ...variables, message: e.target.value })
+            }
+          />
+        </form>
       </Grid>
       <Grid xs={1} align="right">
         <Fab color="primary" aria-label="add">

@@ -11,39 +11,6 @@ export const GET_USER = gql`
       address
       city
       imageUrl
-      dogs {
-        name
-        gender
-        imageUrl
-        tagLine
-        tag {
-          name
-        }
-      }
-      sender {
-        message
-        userId
-        imageUrl
-        recipientId
-        recipientName
-      }
-      recipient {
-        message
-        userId
-        imageUrl
-        recipientId
-        recipientName
-      }
-      dogLike {
-        userId
-        dogId
-        liked
-      }
-      userLike {
-        userId
-        dogId
-        liked
-      }
     }
   }
 `;
@@ -127,7 +94,7 @@ export const GET_ALL_DOGS = gql`
       owner {
         userName
       }
-      tag {
+      tags {
         id
         name
       }
@@ -143,7 +110,7 @@ export const GET_ALL_USER_DOGS = gql`
       gender
       imageUrl
       tagLine
-      tag {
+      tags {
         id
         name
       }

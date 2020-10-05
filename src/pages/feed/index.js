@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  makeStyles
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Deck from "../../components/Feed/Deck";
@@ -26,20 +24,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function Index() {
   const classes = useStyles();
-  return <
-    React.Fragment >
-    <
-    CssBaseline / >
-    <
-    div className = {
-      classes.root
-    } >
-    <
-    SideNav / >
-    <
-    Deck / >
-    <
-    /div> < /
-  React.Fragment >
-
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <div className={classes.root}>
+        <SideNav />
+        <Deck />
+      </div>
+    </React.Fragment>
+  );
 }
