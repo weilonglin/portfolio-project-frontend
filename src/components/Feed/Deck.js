@@ -174,7 +174,7 @@ export default function Deck() {
               <Buttons dir={lefty} />
             </TinderCard>
           </Card>
-        ))}{" "}
+        ))}
       </Grid>
     </>
   );
