@@ -81,7 +81,7 @@ export default function Deck() {
   const [msgerrors, setmsgErrors] = useState({});
   const [variables, setVariables] = useState({});
   const styles = useStyles();
-
+  const userId = localStorage.getItem("user");
   const mediaStyles = useCoverCardMediaStyles({ bgPosition: "top" });
   const textCardContentStyles = useN04TextInfoContentStyles();
   const shadowStyles = useOverShadowStyles({ inactive: true });
@@ -91,6 +91,8 @@ export default function Deck() {
   });
 
   const { loading, error, data } = useQuery(GET_ALL_DOGS);
+
+  console.log("data", data);
 
   if (loading) return "Loading...";
 
@@ -122,59 +124,57 @@ export default function Deck() {
       : "Swipe left to dislike and swipe right to like!";
   return (
     <>
-      <Grid
-        style={{
-          margin: "auto",
-          width: "15%",
-          paddingTop: "100px",
-        }}
-      >
-        {data.allDogs.map((character) => (
-          <Card>
-            <TinderCard
-              className={"swipe"}
-              key={character.name}
-              onSwipe={(dir) =>
-                swiped(
-                  dir,
-                  character.name,
-                  character.owner.userName,
-                  character.ownerId
-                )
-              }
-              onCardLeftScreen={() => outOfFrame(character.name)}
-            >
-              <NoSsr>
-                <GoogleFontLoader
-                  fonts={[
-                    {
-                      font: "Spartan",
-                      weights: [300],
-                    },
-                    {
-                      font: "Montserrat",
-                      weights: [200, 400, 700],
-                    },
-                  ]}
-                />
-              </NoSsr>
-              <Card className={styles.card}>
-                <CardMedia classes={mediaStyles} image={character.imageUrl} />
-                <Box py={3} px={2} className={styles.content}>
-                  <Info useStyles={useGalaxyInfoStyles}>
-                    <InfoTitle>
-                      <h1>{character.name}</h1>
-                    </InfoTitle>
-                    <InfoCaption className={styles.content}>
-                      <h4>{character.tagLine}</h4>
-                    </InfoCaption>
-                  </Info>
-                </Box>
+
+     
+      <Grid style={{ margin: "auto", width: "15%", paddingTop: "100px" }}>
+        {data.allDogs.map((character) => {
+          if (parseInt(character.ownerId) !== parseInt(userId))
+            return (
+              <Card>
+                <TinderCard
+                  className={"swipe"}
+                  key={character.name}
+                  onSwipe={(dir) =>
+                    swiped(
+                      dir,
+                      character.name,
+                      character.owner.userName,
+                      character.ownerId
+                    )
+                  }
+                  onCardLeftScreen={() => outOfFrame(character.name)}
+                >
+                  <NoSsr>
+                    <GoogleFontLoader
+                      fonts={[
+                        { font: "Spartan", weights: [300] },
+                        { font: "Montserrat", weights: [200, 400, 700] },
+                      ]}
+                    />
+                  </NoSsr>
+                  <Card className={styles.card}>
+                    <CardMedia
+                      classes={mediaStyles}
+                      image={character.imageUrl}
+                    />
+                    <Box py={3} px={2} className={styles.content}>
+                      <Info useStyles={useGalaxyInfoStyles}>
+                        <InfoTitle>
+                          <h1>{character.name}</h1>
+                        </InfoTitle>
+
+                        <InfoCaption className={styles.content}>
+                          <h4>{character.tagLine}</h4>
+                        </InfoCaption>
+                      </Info>
+                    </Box>
+                  </Card>
+                  <Buttons dir={lefty} />
+                </TinderCard>
+
               </Card>
-              <Buttons dir={lefty} />
-            </TinderCard>
-          </Card>
-        ))}
+            );
+        })}
       </Grid>
     </>
   );

@@ -83,6 +83,7 @@ export default function SideNav(props) {
     }
   );
 
+
   const msgT = msgData === undefined ? null : msgData["chatMessage"];
 
   const {
@@ -145,10 +146,13 @@ export default function SideNav(props) {
     }
   }, [userImage]);
 
+
   if (!allNames || dogData === undefined) {
     return "...loading";
   }
-  console.log(allNames);
+
+
+  
   return (
     <>
       <Grid className={classes.root} xs={2}>
