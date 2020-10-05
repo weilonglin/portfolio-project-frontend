@@ -70,7 +70,7 @@ export default function ChatWindow(props) {
       </List>
     </div>
   );
-  console.log("image?", props.data);
+
   return (
     <div>
       {["left"].map((anchor) => (
