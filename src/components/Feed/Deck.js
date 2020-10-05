@@ -1,34 +1,21 @@
 import React, { useState } from "react";
 import TinderCard from "react-tinder-card";
 import { useQuery } from "@apollo/react-hooks";
-import Button from "react-bootstrap/Button";
-import { spacing } from "@material-ui/system";
-import { useMutation, useLazyQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { GET_ALL_DOGS, SEND_MESSAGE } from "../../graphql/queries";
 import { Grid } from "@material-ui/core";
-import cx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import TextInfoContent from "@mui-treasury/components/content/textInfo";
-import { useFourThreeCardMediaStyles } from "@mui-treasury/styles/cardMedia/fourThree";
 import { useN04TextInfoContentStyles } from "@mui-treasury/styles/textInfoContent/n04";
 import { useOverShadowStyles } from "@mui-treasury/styles/shadow/over";
 import Box from "@material-ui/core/Box";
-import {
-  Info,
-  InfoCaption,
-  InfoSubtitle,
-  InfoTitle,
-} from "@mui-treasury/components/info";
+import { Info, InfoCaption, InfoTitle } from "@mui-treasury/components/info";
 import { useGalaxyInfoStyles } from "@mui-treasury/styles/info/galaxy";
 import { useCoverCardMediaStyles } from "@mui-treasury/styles/cardMedia/cover";
 import NoSsr from "@material-ui/core/NoSsr";
 import GoogleFontLoader from "react-google-font-loader";
-import ClearIcon from "@material-ui/icons/Clear";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ReplayIcon from "@material-ui/icons/Replay";
+
 import Buttons from "./Buttons";
 
 const useStyles = makeStyles(() => ({
@@ -58,7 +45,10 @@ const useStyles = makeStyles(() => ({
   },
   shadow: {
     color: "#fff",
-    textShadowOffset: { width: 2, height: 2 },
+    textShadowOffset: {
+      width: 2,
+      height: 2,
+    },
     textShadowRadius: 1,
     textShadowColor: "#000",
   },
@@ -105,14 +95,8 @@ export default function Deck() {
   console.log("data", data);
 
   if (loading) return "Loading...";
+
   if (error) return <p>Error! ${error.message}</p>;
-
-  const submitMessage = () => {
-    sendMessage({ variables });
-  };
-
-  const db = data;
-  const characters = db;
 
   const swiped = (direction, nameToDelete, userName, ownerId) => {
     setLastDirection(direction);
@@ -140,6 +124,8 @@ export default function Deck() {
       : "Swipe left to dislike and swipe right to like!";
   return (
     <>
+
+     
       <Grid style={{ margin: "auto", width: "15%", paddingTop: "100px" }}>
         {data.allDogs.map((character) => {
           if (parseInt(character.ownerId) !== parseInt(userId))
@@ -185,6 +171,7 @@ export default function Deck() {
                   </Card>
                   <Buttons dir={lefty} />
                 </TinderCard>
+
               </Card>
             );
         })}
