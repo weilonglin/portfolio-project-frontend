@@ -165,7 +165,6 @@ export default function Deck() {
                     <InfoTitle>
                       <h1>{character.name}</h1>
                     </InfoTitle>
-
                     <InfoCaption className={styles.content}>
                       <h4>{character.tagLine}</h4>
                     </InfoCaption>
