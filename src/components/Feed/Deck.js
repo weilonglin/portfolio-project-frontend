@@ -92,13 +92,10 @@ export default function Deck() {
 
   const { loading, error, data } = useQuery(GET_ALL_DOGS);
 
-<<<<<<< HEAD
   console.log("data", data);
 
   if (loading) return "Loading...";
 
-
->>>>>>> 455ad36d2fc423cabf6812c9182c5053f6cf693e
   if (error) return <p>Error! ${error.message}</p>;
 
   const swiped = (direction, nameToDelete, userName, ownerId) => {
@@ -127,10 +124,7 @@ export default function Deck() {
       : "Swipe left to dislike and swipe right to like!";
   return (
     <>
-<<<<<<< HEAD
       <Grid style={{ margin: "auto", width: "15%", paddingTop: "100px" }}>
-
->>>>>>> 455ad36d2fc423cabf6812c9182c5053f6cf693e
         {data.allDogs.map((character) => {
           if (parseInt(character.ownerId) !== parseInt(userId))
             return (
@@ -182,4 +176,3 @@ export default function Deck() {
     </>
   );
 }
-
