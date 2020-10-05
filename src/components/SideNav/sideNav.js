@@ -88,7 +88,7 @@ export default function SideNav(props) {
       },
     }
   );
-  console.log("msgdata", msgData);
+
   const { loading: dogLoading, error: dogError, data: dogData } = useQuery(
     GET_ALL_USER_DOGS,
     {
@@ -100,7 +100,6 @@ export default function SideNav(props) {
 
   const myDogs =
     dogData === null || dogData === undefined ? null : dogData.allDogsUser;
-  console.log("my dogs", myDogs);
 
   const { loading: allLoading, error: allError, data: allData } = useQuery(
     GET_ALL_USERS
@@ -168,8 +167,7 @@ export default function SideNav(props) {
     const newNames = [...allNames, subChat];
     const newMessage = [...sender, subMessages];
     const filtered = getUnique(newNames, "recipientName");
-    console.log("subData", subData);
-    console.log("filtered", filtered);
+
     setAllnames(filtered);
 
     setSender(newMessage);
@@ -214,29 +212,23 @@ export default function SideNav(props) {
                   }
                 });
 
-          if (
-            user.userId !== parseInt(userId) &&
-            user.recipient.id === parseInt(userId)
-          ) {
-            return (
-              <Chat
-                src={user.sender.imageUrl}
-                name={user.sender.userName}
-                id={user.sender.id}
-                messages={chatsSender}
-                data={subData}
-                myName={userName}
-              />
-            );
-          } else if (
-            user.recipientId !== parseInt(userId) &&
-            user.recipient.id !== parseInt(userId)
-          ) {
+          if (user.userId === parseInt(userId)) {
             return (
               <Chat
                 src={user.recipient.imageUrl}
                 name={user.recipient.userName}
                 id={user.recipient.id}
+                messages={chatsSender}
+                data={subData}
+                myName={userName}
+              />
+            );
+          } else if (user.recipientId === parseInt(userId)) {
+            return (
+              <Chat
+                src={user.sender.imageUrl}
+                name={user.sender.userName}
+                id={user.sender.id}
                 messages={chatsSender}
                 data={subData}
                 myName={userName}
@@ -250,29 +242,30 @@ export default function SideNav(props) {
       ? null
       : allNames.map((user) => {
           console.log("user", user);
-          if (
-            user.userId !== parseInt(userId) &&
-            user.recipient.id === parseInt(userId)
-          ) {
-            return (
-              <Avatar
-                alt="Remy Sharp"
-                src={user.sender.imageUrl}
-                className={classes.large}
-              />
-            );
-          } else if (
-            user.recipientId !== parseInt(userId) &&
-            user.recipient.id !== parseInt(userId)
-          ) {
-            return (
-              <Avatar
-                alt="Remy Sharp"
-                src={user.recipient.imageUrl}
-                className={classes.large}
-              />
-            );
-          }
+          console.log("allnames", allNames);
+          // if (user.userId === parseInt(userId)) {
+          return (
+            <Avatar
+              alt="Remy Sharp"
+              src={
+                user.userId === parseInt(userId)
+                  ? user.recipient.imageUrl
+                  : user.sender.imageUrl
+              }
+              className={classes.large}
+            />
+          );
+          // }
+
+          // else if (user.recipientId === parseInt(userId)) {
+          //   return (
+          //     <Avatar
+          //       alt="Remy Sharp"
+          //       src={user.sender.imageUrl}
+          //       className={classes.large}
+          //     />
+          //   );
+          // }
         });
   console.log("avatar2", avatar2);
 
