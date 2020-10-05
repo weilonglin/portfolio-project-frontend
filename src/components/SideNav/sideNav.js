@@ -1,40 +1,26 @@
 import React, { useState, useEffect } from "react";
-import TopBar from "./TopBar";
 
+import TopBar from "./TopBar";
 import Chat from "../Chat/Chat";
 import { useAuthDispatch } from "../../context/auth";
-import { useHistory, Link } from "react-router-dom";
-import decode from "jwt-decode";
+import { useHistory } from "react-router-dom";
 import { GET_USER } from "../../graphql/queries";
-import { useQuery, useSubscription, useLazyQuery } from "@apollo/react-hooks";
-import { Avatar, classes, Grid } from "@material-ui/core";
-import { array } from "prop-types";
+import { useQuery, useSubscription } from "@apollo/react-hooks";
+import { Avatar, Grid } from "@material-ui/core";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import List from "@material-ui/core/List";
 import {
   SUB_MESSAGE,
-  GET_USER_IMAGE,
   GET_MESSAGES,
-  GET_USER_IMAGES,
-  GET_ALL_USERS,
   GET_ALL_USER_DOGS,
 } from "../../graphql/queries";
-
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
 import Button from "@material-ui/core/Button";
-
-import SignupDog from "../../pages/signupDog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,13 +49,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SideNav(props) {
   const [allNames, setAllnames] = useState([]);
-  const [chatUsers, setChatUsers] = useState([]);
+
   const [sender, setSender] = useState([]);
-  const [recipient, setRecipient] = useState([]);
-  const [chat, setChat] = useState(``);
+
   const user = localStorage.getItem("user");
   const userId = localStorage.getItem("user");
-  const [myPic, setMyPic] = useState("");
+
   const classes = useStyles();
   const { loading, error, data } = useQuery(GET_USER, {
     variables: {
@@ -88,7 +73,7 @@ export default function SideNav(props) {
       },
     }
   );
-  console.log("msgdata", msgData);
+
   const { loading: dogLoading, error: dogError, data: dogData } = useQuery(
     GET_ALL_USER_DOGS,
     {
@@ -98,16 +83,6 @@ export default function SideNav(props) {
     }
   );
 
-  const myDogs =
-    dogData === null || dogData === undefined ? null : dogData.allDogsUser;
-  console.log("my dogs", myDogs);
-
-  const { loading: allLoading, error: allError, data: allData } = useQuery(
-    GET_ALL_USERS
-  );
-
-  const allUserImagesNames =
-    allData === undefined || allData === null ? null : allData.allUsers;
   const msgT = msgData === undefined ? null : msgData["chatMessage"];
 
   const {
@@ -121,10 +96,6 @@ export default function SideNav(props) {
     },
   });
 
-  // const { loading: imgLoading, error: imgError, data: imgData } = useQuery(
-  //   GET_USER_IMAGES
-  // );
-
   const dispatch = useAuthDispatch();
   const history = useHistory();
 
@@ -135,31 +106,23 @@ export default function SideNav(props) {
 
   function getUnique(arr, comp) {
     const unique =
-      msgT === undefined || msgT === null
+      msgT === null
         ? null
         : arr
             .map((e) => e[comp])
             .map((e, i, final) => final.indexOf(e) === i && i)
             .filter((e) => arr[e])
             .map((e) => arr[e]);
-
     return unique;
   }
-  const loadingor = loading === null || undefined ? false : true;
-  useEffect(() => {
-    const chats =
-      msgT === undefined || msgT === null
-        ? null
-        : msgT.map((name) => {
-            return name.recipientName + name.recipientId;
-          });
 
+  useEffect(() => {
     const filtered = getUnique(msgT, "recipientName");
 
     setAllnames(filtered);
 
     setSender(msgT);
-  }, [msgData, subData, loadingor]);
+  }, [msgData, subData, msgT]);
 
   useEffect(() => {
     const subChat = subLoading ? null : subData.chatMessage;
@@ -168,8 +131,7 @@ export default function SideNav(props) {
     const newNames = [...allNames, subChat];
     const newMessage = [...sender, subMessages];
     const filtered = getUnique(newNames, "recipientName");
-    console.log("subData", subData);
-    console.log("filtered", filtered);
+
     setAllnames(filtered);
 
     setSender(newMessage);
@@ -183,126 +145,10 @@ export default function SideNav(props) {
     }
   }, [userImage]);
 
-  const userName = data == undefined ? null : data.user.userName;
+  if (!allNames || dogData === undefined) {
+    return "...loading";
+  }
 
-  const avatar =
-    allNames === null || allNames === undefined
-      ? null
-      : allNames.map((user) => {
-          const chatsSender =
-            loading ||
-            data == undefined ||
-            sender === null ||
-            sender === undefined
-              ? null
-              : sender.filter((name) => {
-                  const nameM =
-                    name.recipientName === null ||
-                    name.recipientName === undefined
-                      ? null
-                      : name.recipientName;
-                  const userM =
-                    user.recipientName === null ||
-                    user.recipientName === undefined
-                      ? null
-                      : user.recipientName;
-                  if (
-                    nameM === userM ||
-                    parseInt(name.userId) === parseInt(user.recipientId)
-                  ) {
-                    return name;
-                  }
-                });
-
-          if (
-            user.userId !== parseInt(userId) &&
-            user.recipient.id === parseInt(userId)
-          ) {
-            return (
-              <Chat
-                src={user.sender.imageUrl}
-                name={user.sender.userName}
-                id={user.sender.id}
-                messages={chatsSender}
-                data={subData}
-                myName={userName}
-              />
-            );
-          } else if (
-            user.recipientId !== parseInt(userId) &&
-            user.recipient.id !== parseInt(userId)
-          ) {
-            return (
-              <Chat
-                src={user.recipient.imageUrl}
-                name={user.recipient.userName}
-                id={user.recipient.id}
-                messages={chatsSender}
-                data={subData}
-                myName={userName}
-              />
-            );
-          }
-        });
-
-  const avatar2 =
-    allNames === null || allNames === undefined
-      ? null
-      : allNames.map((user) => {
-          console.log("user", user);
-          if (
-            user.userId !== parseInt(userId) &&
-            user.recipient.id === parseInt(userId)
-          ) {
-            return (
-              <Avatar
-                alt="Remy Sharp"
-                src={user.sender.imageUrl}
-                className={classes.large}
-              />
-            );
-          } else if (
-            user.recipientId !== parseInt(userId) &&
-            user.recipient.id !== parseInt(userId)
-          ) {
-            return (
-              <Avatar
-                alt="Remy Sharp"
-                src={user.recipient.imageUrl}
-                className={classes.large}
-              />
-            );
-          }
-        });
-  console.log("avatar2", avatar2);
-
-  const dogAvatar =
-    myDogs === null || myDogs === undefined
-      ? null
-      : myDogs.map((dog) => {
-          return (
-            <Avatar
-              alt="Remy Sharp"
-              src={dog.imageUrl}
-              className={classes.large}
-            />
-          );
-        });
-  const dogAvatar2 =
-    myDogs === null || myDogs === undefined
-      ? null
-      : myDogs.map((dog) => {
-          return (
-            <Chat
-              src={dog.imageUrl}
-              name={dog.name}
-              id={dog.id}
-              tagLine={dog.tagLin}
-              data={dog}
-              myId={user}
-            />
-          );
-        });
   return (
     <>
       <Grid className={classes.root} xs={2}>
@@ -311,20 +157,86 @@ export default function SideNav(props) {
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
             <Typography className={classes.heading}>
-              {avatar2 === null ? (
-                "No messages"
-              ) : avatar2 === [] ? (
-                "No messages"
-              ) : avatar2.length === 0 ? (
-                "No messages"
-              ) : (
-                <AvatarGroup max={4}>{avatar2}</AvatarGroup>
-              )}
+              {" "}
+              {
+                <AvatarGroup max={4}>
+                  {" "}
+                  {allNames.length === 0
+                    ? "No messages"
+                    : allNames.map((user) => {
+                        if (
+                          user.userId !== parseInt(userId) &&
+                          user.recipient.id === parseInt(userId)
+                        ) {
+                          return (
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={user.sender.imageUrl}
+                              className={classes.large}
+                            />
+                          );
+                        } else if (
+                          user.recipientId !== parseInt(userId) &&
+                          user.recipient.id !== parseInt(userId)
+                        ) {
+                          return (
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={user.recipient.imageUrl}
+                              className={classes.large}
+                            />
+                          );
+                        }
+                      })}
+                </AvatarGroup>
+              }{" "}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography className={classes.spread}>
-              {avatar == undefined ? null : avatar}
+              {" "}
+              {allNames.length === 0
+                ? "No messages"
+                : allNames.map((user) => {
+                    const chatsSender = sender.filter((name) => {
+                      if (
+                        name.recipientName === user.recipientName ||
+                        parseInt(name.userId) === parseInt(user.recipientId)
+                      ) {
+                        return name;
+                      }
+                    });
+
+                    if (
+                      user.userId !== parseInt(userId) &&
+                      user.recipient.id === parseInt(userId)
+                    ) {
+                      return (
+                        <Chat
+                          src={user.sender.imageUrl}
+                          name={user.sender.userName}
+                          id={user.sender.id}
+                          messages={chatsSender}
+                          data={subData}
+                          myName={data.user.userName}
+                        />
+                      );
+                    } else if (
+                      user.recipientId !== parseInt(userId) &&
+                      user.recipient.id !== parseInt(userId)
+                    ) {
+                      return (
+                        <Chat
+                          src={user.recipient.imageUrl}
+                          name={user.recipient.userName}
+                          id={user.recipient.id}
+                          messages={chatsSender}
+                          data={subData}
+                          myName={data.user.userName}
+                        />
+                      );
+                    }
+                  })}{" "}
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -332,7 +244,20 @@ export default function SideNav(props) {
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
             <Typography className={classes.heading}>
-              <AvatarGroup max={3}>{dogAvatar}</AvatarGroup>
+              <AvatarGroup max={3}>
+                {" "}
+                {dogData.allDogsUser.length === 0
+                  ? "Add your first dog!"
+                  : dogData.allDogsUser.map((dog) => {
+                      return (
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={dog.imageUrl}
+                          className={classes.large}
+                        />
+                      );
+                    })}
+              </AvatarGroup>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>

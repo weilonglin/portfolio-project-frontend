@@ -1,28 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useQuery, useSubscription } from "@apollo/react-hooks";
-import { SUB_MESSAGE, GET_ALL_MESSAGES } from "../../graphql/queries";
 import SendMessages from "./SendMessages";
-import { GET_USER } from "../../graphql/queries";
-import ChatWindow from "./ChatWindow";
-import { Avatar, classes } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Fab from "@material-ui/core/Fab";
-import SendIcon from "@material-ui/icons/Send";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -42,46 +29,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Chat(props) {
-  const image2 =
-    props.src === null || props.src === undefined ? null : props.src;
-  const name2 = props.name === null ? null : props.name;
-  const id2 = props.id === null ? null : props.id;
+  const image2 = props.src;
+  const name2 = props.name;
+  const id2 = props.id;
   const userImage = localStorage.getItem("useImg");
-  const [active, setActive] = useState(false);
   const [messages, setMessages] = useState([]);
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    left: false,
-  });
+  const [state, setState] = React.useState({ left: false });
   const user = localStorage.getItem("user");
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === "keydown") {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setState({
+      ...state,
+      [anchor]: open,
+    });
   };
-  let usersCopy;
-  useEffect(() => {
-    // const data =
-    //   props.data === undefined
-    //     ? props.messages
-    //     : props.data.chatMessage.recipientName === props.name
-    //     ? [...messages, props.data.chatMessage]
-    //     : props.messages;
 
+  useEffect(() => {
     setMessages(props.messages);
   }, [props]);
 
-  function toggleActive() {
-    if (active === false) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
-  }
-
-  const image = props.src;
   const chat =
     messages === null
       ? null
@@ -133,7 +103,7 @@ export default function Chat(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <Grid item xs={11}>
-        <List className={classes.messageArea}>{chat}</List>
+        <List className={classes.messageArea}> {chat}</List>
         <Divider />
 
         <SendMessages
@@ -150,6 +120,7 @@ export default function Chat(props) {
     <div>
       <div>
         <div>
+          {" "}
           {["left"].map((anchor) => (
             <React.Fragment key={anchor}>
               <List>
@@ -161,7 +132,7 @@ export default function Chat(props) {
                   <ListItemIcon>
                     <Avatar alt={name2} src={image2} />
                   </ListItemIcon>
-                  <ListItemText primary={name2}>{name2}</ListItemText>
+                  <ListItemText primary={name2}> {name2}</ListItemText>
                 </ListItem>
               </List>
               <Drawer
@@ -169,17 +140,13 @@ export default function Chat(props) {
                 open={state[anchor]}
                 onClose={toggleDrawer(anchor, false)}
               >
-                {list(anchor)}
+                {" "}
+                {list(anchor)}{" "}
               </Drawer>
             </React.Fragment>
-          ))}
+          ))}{" "}
         </div>
-        {/* <Avatar alt={props.name} src={props.src} onClick={toggleActive} />
-        <p> {props.name}</p> */}
       </div>
-      {/* <div className="message">{active === false ? null : chat}</div> */}
-      <div></div>
-      {/* <myMessages message={chats} active={active} /> */}
     </div>
   );
 }

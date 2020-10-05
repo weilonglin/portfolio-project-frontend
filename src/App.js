@@ -1,7 +1,6 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import NavBar from "./components/NavBar/NavBar";
 import Homepage from "./pages/homepage";
 
 import Login from "./pages/login";
