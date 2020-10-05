@@ -106,7 +106,7 @@ export default function SideNav(props) {
 
   function getUnique(arr, comp) {
     const unique =
-      msgT === undefined || msgT === null
+      msgT === null
         ? null
         : arr
             .map((e) => e[comp])
@@ -122,7 +122,7 @@ export default function SideNav(props) {
     setAllnames(filtered);
 
     setSender(msgT);
-  }, [msgData, subData]);
+  }, [msgData, subData, msgT]);
 
   useEffect(() => {
     const subChat = subLoading ? null : subData.chatMessage;
@@ -145,92 +145,10 @@ export default function SideNav(props) {
     }
   }, [userImage]);
 
-  const userName = data == undefined ? null : data.user.userName;
-
-  const avatar = !allNames
-    ? "...loading"
-    : allNames.map((user) => {
-        const chatsSender = sender.filter((name) => {
-          if (
-            name.recipientName === user.recipientName ||
-            parseInt(name.userId) === parseInt(user.recipientId)
-          ) {
-            return name;
-          }
-        });
-
-        if (
-          user.userId !== parseInt(userId) &&
-          user.recipient.id === parseInt(userId)
-        ) {
-          return (
-            <Chat
-              src={user.sender.imageUrl}
-              name={user.sender.userName}
-              id={user.sender.id}
-              messages={chatsSender}
-              data={subData}
-              myName={userName}
-            />
-          );
-        } else if (
-          user.recipientId !== parseInt(userId) &&
-          user.recipient.id !== parseInt(userId)
-        ) {
-          return (
-            <Chat
-              src={user.recipient.imageUrl}
-              name={user.recipient.userName}
-              id={user.recipient.id}
-              messages={chatsSender}
-              data={subData}
-              myName={userName}
-            />
-          );
-        }
-      });
-
-  const avatar2 = !allNames
-    ? "...loading"
-    : allNames.map((user) => {
-        if (
-          user.userId !== parseInt(userId) &&
-          user.recipient.id === parseInt(userId)
-        ) {
-          return (
-            <Avatar
-              alt="Remy Sharp"
-              src={user.sender.imageUrl}
-              className={classes.large}
-            />
-          );
-        } else if (
-          user.recipientId !== parseInt(userId) &&
-          user.recipient.id !== parseInt(userId)
-        ) {
-          return (
-            <Avatar
-              alt="Remy Sharp"
-              src={user.recipient.imageUrl}
-              className={classes.large}
-            />
-          );
-        }
-      });
-
-  const dogAvatar =
-    dogData === undefined
-      ? "...loading"
-      : dogData.allDogsUser.map((dog) => {
-          return (
-            <Avatar
-              alt="Remy Sharp"
-              src={dog.imageUrl}
-              className={classes.large}
-            />
-          );
-        });
-
+  if (!allNames || dogData === undefined) {
+    return "...loading";
+  }
+  console.log(allNames);
   return (
     <>
       <Grid className={classes.root} xs={2}>
@@ -240,21 +158,85 @@ export default function SideNav(props) {
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
             <Typography className={classes.heading}>
               {" "}
-              {avatar2 === null ? (
-                "No messages"
-              ) : avatar2 === [] ? (
-                "No messages"
-              ) : avatar2.length === 0 ? (
-                "No messages"
-              ) : (
-                <AvatarGroup max={4}> {avatar2}</AvatarGroup>
-              )}{" "}
+              {
+                <AvatarGroup max={4}>
+                  {" "}
+                  {allNames.length === 0
+                    ? "No messages"
+                    : allNames.map((user) => {
+                        if (
+                          user.userId !== parseInt(userId) &&
+                          user.recipient.id === parseInt(userId)
+                        ) {
+                          return (
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={user.sender.imageUrl}
+                              className={classes.large}
+                            />
+                          );
+                        } else if (
+                          user.recipientId !== parseInt(userId) &&
+                          user.recipient.id !== parseInt(userId)
+                        ) {
+                          return (
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={user.recipient.imageUrl}
+                              className={classes.large}
+                            />
+                          );
+                        }
+                      })}
+                </AvatarGroup>
+              }{" "}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography className={classes.spread}>
               {" "}
-              {avatar == undefined ? null : avatar}{" "}
+              {allNames.length === 0
+                ? "No messages"
+                : allNames.map((user) => {
+                    const chatsSender = sender.filter((name) => {
+                      if (
+                        name.recipientName === user.recipientName ||
+                        parseInt(name.userId) === parseInt(user.recipientId)
+                      ) {
+                        return name;
+                      }
+                    });
+
+                    if (
+                      user.userId !== parseInt(userId) &&
+                      user.recipient.id === parseInt(userId)
+                    ) {
+                      return (
+                        <Chat
+                          src={user.sender.imageUrl}
+                          name={user.sender.userName}
+                          id={user.sender.id}
+                          messages={chatsSender}
+                          data={subData}
+                          myName={data.user.userName}
+                        />
+                      );
+                    } else if (
+                      user.recipientId !== parseInt(userId) &&
+                      user.recipient.id !== parseInt(userId)
+                    ) {
+                      return (
+                        <Chat
+                          src={user.recipient.imageUrl}
+                          name={user.recipient.userName}
+                          id={user.recipient.id}
+                          messages={chatsSender}
+                          data={subData}
+                          myName={data.user.userName}
+                        />
+                      );
+                    }
+                  })}{" "}
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -262,7 +244,20 @@ export default function SideNav(props) {
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
             <Typography className={classes.heading}>
-              <AvatarGroup max={3}> {dogAvatar}</AvatarGroup>
+              <AvatarGroup max={3}>
+                {" "}
+                {dogData.allDogsUser.length === 0
+                  ? "Add your first dog!"
+                  : dogData.allDogsUser.map((dog) => {
+                      return (
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={dog.imageUrl}
+                          className={classes.large}
+                        />
+                      );
+                    })}
+              </AvatarGroup>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
