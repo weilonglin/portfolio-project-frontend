@@ -92,8 +92,6 @@ export default function Deck() {
 
   const { loading, error, data } = useQuery(GET_ALL_DOGS);
 
-  console.log("data", data);
-
   if (loading) return "Loading...";
 
   if (error) return <p>Error! ${error.message}</p>;
@@ -124,9 +122,13 @@ export default function Deck() {
       : "Swipe left to dislike and swipe right to like!";
   return (
     <>
-
-     
-      <Grid style={{ margin: "auto", width: "15%", paddingTop: "100px" }}>
+      <Grid
+        style={{
+          margin: "auto",
+          width: "15%",
+          paddingTop: "100px",
+        }}
+      >
         {data.allDogs.map((character) => {
           if (parseInt(character.ownerId) !== parseInt(userId))
             return (
@@ -171,7 +173,6 @@ export default function Deck() {
                   </Card>
                   <Buttons dir={lefty} />
                 </TinderCard>
-
               </Card>
             );
         })}
@@ -179,3 +180,4 @@ export default function Deck() {
     </>
   );
 }
+
