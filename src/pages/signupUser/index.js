@@ -1,14 +1,11 @@
-import React, { useState, useHistory } from "react";
+import React, { useState } from "react";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -40,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignupUser(props) {
   const classes = useStyles();
-  const history = useHistory;
   const [variables, setVariables] = useState({
     full_name: "",
     userName: "",
@@ -54,7 +50,7 @@ export default function SignupUser(props) {
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
     update: (_, __) => props.history.push("/feed"),
-    onError: (err) => setErrors(err.graphQLErrors[0]),
+    onError: (err) => setErrors(err.graphQLErrors[0]).then(console.log(errors)),
   });
 
   const submitRegisterForm = (e) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Deck.css";
 import TinderCard from "react-tinder-card";
 import { useQuery } from "@apollo/react-hooks";
@@ -10,9 +10,6 @@ export default function Deck() {
 
   if (loading) return "Loading...";
   if (error) return <p>Error! ${error.message}</p>;
-
-  const db = data;
-  const characters = db;
 
   const swiped = (direction, nameToDelete) => {
     console.log("Nope" + nameToDelete);

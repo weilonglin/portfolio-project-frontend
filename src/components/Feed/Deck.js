@@ -7,16 +7,15 @@ import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
-import { useN04TextInfoContentStyles } from "@mui-treasury/styles/textInfoContent/n04";
-import { useOverShadowStyles } from "@mui-treasury/styles/shadow/over";
 import Box from "@material-ui/core/Box";
 import { Info, InfoCaption, InfoTitle } from "@mui-treasury/components/info";
 import { useGalaxyInfoStyles } from "@mui-treasury/styles/info/galaxy";
 import { useCoverCardMediaStyles } from "@mui-treasury/styles/cardMedia/cover";
 import NoSsr from "@material-ui/core/NoSsr";
 import GoogleFontLoader from "react-google-font-loader";
-
 import Buttons from "./Buttons";
+
+import "../Homepage/Deck.css";
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -66,7 +65,6 @@ const useStyles = makeStyles(() => ({
     height: "100%",
     alignItems: "center",
     justify: "center",
-    height: "100%",
     position: "absolute",
     direction: "column",
   },
@@ -82,15 +80,13 @@ export default function Deck() {
   const user = localStorage.getItem("user");
   const [lastDirection, setLastDirection] = useState();
   const [msgerrors, setmsgErrors] = useState({});
-  const [variables, setVariables] = useState({});
   const styles = useStyles();
   const userId = localStorage.getItem("user");
   const mediaStyles = useCoverCardMediaStyles({ bgPosition: "top" });
-  const textCardContentStyles = useN04TextInfoContentStyles();
-  const shadowStyles = useOverShadowStyles({ inactive: true });
 
-  const [sendMessage, { loading: msgLoading }] = useMutation(SEND_MESSAGE, {
-    onError: (err) => setmsgErrors(err.graphQLErrors),
+  const [sendMessage] = useMutation(SEND_MESSAGE, {
+    onError: (err) =>
+      setmsgErrors(err.graphQLErrors).then(console.log(msgerrors)),
   });
 
   const { loading, error, data } = useQuery(GET_ALL_DOGS);
@@ -103,7 +99,7 @@ export default function Deck() {
 
   const swiped = (direction, nameToDelete, userName, ownerId) => {
     setLastDirection(direction);
-    if (direction == "right") {
+    if (direction === "right") {
       sendMessage({
         variables: {
           userId: parseInt(user),
@@ -129,12 +125,13 @@ export default function Deck() {
     <>
       <Grid style={{ margin: "auto", width: "15%", paddingTop: "100px" }}>
         {data.allDogs.map((character) => {
-          if (parseInt(character.ownerId) !== parseInt(userId))
+          if (parseInt(character.ownerId) === parseInt(userId)) {
+            return null;
+          } else {
             return (
-              <Card>
+              <Card key={`tindercard-${character.id}`}>
                 <TinderCard
                   className={"swipe"}
-                  key={character.name}
                   onSwipe={(dir) =>
                     swiped(
                       dir,
@@ -160,12 +157,10 @@ export default function Deck() {
                     />
                     <Box py={3} px={2} className={styles.content}>
                       <Info useStyles={useGalaxyInfoStyles}>
-                        <InfoTitle>
-                          <h1>{character.name}</h1>
-                        </InfoTitle>
+                        <InfoTitle>{character.name}</InfoTitle>
 
                         <InfoCaption className={styles.content}>
-                          <h4>{character.tagLine}</h4>
+                          {character.tagLine}
                         </InfoCaption>
                       </Info>
                     </Box>
@@ -173,8 +168,9 @@ export default function Deck() {
                 </TinderCard>
               </Card>
             );
+          }
         })}
-        {/* <Buttons dir={lefty} /> */}
+        <Buttons dir={lefty} />
       </Grid>
     </>
   );

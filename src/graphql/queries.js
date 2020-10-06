@@ -45,6 +45,7 @@ export const GET_USER_IMAGE = gql`
 export const GET_MESSAGES = gql`
   query chatMessage($id: Int!) {
     chatMessage(id: $id) {
+      id
       message
       imageUrl
       imageUrlRecipient
@@ -112,6 +113,9 @@ export const GET_ALL_USER_DOGS = gql`
       tags {
         id
         name
+      }
+      dogLike {
+        liked
       }
     }
   }

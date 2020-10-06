@@ -1,4 +1,4 @@
-import React, { useState, useHistory } from "react";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { SEND_MESSAGE } from "../../graphql/queries";
 import { useMutation } from "@apollo/react-hooks";
@@ -14,15 +14,13 @@ export default function SendMessages(props) {
     recipientName: props.recipientName,
     imageUrl: props.img,
   });
-  const [errors, setErrors] = useState({});
 
-  const [sendMessage, { loading }] = useMutation(SEND_MESSAGE, {
-    onError: (err) => setErrors(err.graphQLErrors),
+  const [sendMessage] = useMutation(SEND_MESSAGE, {
+    onError: (err) => console.log(err.graphQLErrors),
   });
 
   const submitMessage = (e) => {
     e.preventDefault();
-    console.log("variables", variables);
     sendMessage({ variables });
   };
 
@@ -41,7 +39,7 @@ export default function SendMessages(props) {
           />
         </form>
       </Grid>
-      <Grid xs={1} align="right">
+      <Grid xs={1} item={true} align="right">
         <Fab color="primary" aria-label="add">
           <SendIcon onClick={submitMessage} />
         </Fab>

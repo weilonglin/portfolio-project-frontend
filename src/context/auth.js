@@ -1,7 +1,5 @@
 import React, { createContext, useReducer, useContext } from "react";
 import jwtDecode from "jwt-decode";
-import { GET_USER } from "../graphql/queries";
-import { useHistory } from "react-router-dom";
 
 const AuthStateContext = createContext();
 const AuthDispatchContext = createContext();

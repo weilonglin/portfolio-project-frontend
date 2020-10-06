@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import TopBar from "./TopBar";
 import Chat from "../Chat/Chat";
+
 import { useAuthDispatch } from "../../context/auth";
 import { useHistory } from "react-router-dom";
 import { GET_USER } from "../../graphql/queries";
@@ -56,40 +57,30 @@ export default function SideNav(props) {
   const userId = localStorage.getItem("user");
 
   const classes = useStyles();
-  const { loading, error, data } = useQuery(GET_USER, {
+  const { data } = useQuery(GET_USER, {
     variables: {
       id: parseInt(user),
     },
   });
   const AddDog = () => {
-    history.push("/add-dog");
+    props.switch("addDog");
   };
 
-  const { loading: msgLoading, error: msgError, data: msgData } = useQuery(
-    GET_MESSAGES,
-    {
-      variables: {
-        id: parseInt(user),
-      },
-    }
-  );
+  const { data: msgData } = useQuery(GET_MESSAGES, {
+    variables: {
+      id: parseInt(user),
+    },
+  });
 
-  const { loading: dogLoading, error: dogError, data: dogData } = useQuery(
-    GET_ALL_USER_DOGS,
-    {
-      variables: {
-        id: parseInt(user),
-      },
-    }
-  );
+  const { data: dogData } = useQuery(GET_ALL_USER_DOGS, {
+    variables: {
+      id: parseInt(user),
+    },
+  });
 
   const msgT = msgData === undefined ? null : msgData["chatMessage"];
 
-  const {
-    loading: subLoading,
-    error: subError,
-    data: subData,
-  } = useSubscription(SUB_MESSAGE, {
+  const { loading: subLoading, data: subData } = useSubscription(SUB_MESSAGE, {
     variables: {
       userId: parseInt(user),
       recipientId: parseInt(user),
@@ -106,7 +97,7 @@ export default function SideNav(props) {
 
   function getUnique(arr, comp) {
     const unique =
-      msgT === undefined || msgT === null
+      msgT === null
         ? null
         : arr
             .map((e) => e[comp])
@@ -122,10 +113,9 @@ export default function SideNav(props) {
     setAllnames(filtered);
 
     setSender(msgT);
-  }, [msgData, subData]);
+  }, [msgData, msgT]);
 
   useEffect(() => {
-    console.log(subData);
     const subChat = subLoading ? null : subData.chatMessage;
     const subMessages = subLoading ? null : subData.chatMessage;
 
@@ -138,7 +128,7 @@ export default function SideNav(props) {
     setSender(newMessage);
   }, [subData]);
 
-  const userImage = data == undefined ? null : data.user.imageUrl;
+  const userImage = data === undefined ? null : data.user.imageUrl;
 
   useEffect(() => {
     if (userImage !== null) {
@@ -146,124 +136,130 @@ export default function SideNav(props) {
     }
   }, [userImage]);
 
-  const userName = data == undefined ? null : data.user.userName;
-
-  const avatar = !allNames
-    ? "...loading"
-    : allNames.map((user) => {
-        const chatsSender = sender.filter((name) => {
-          if (
-            name.recipientName === user.recipientName ||
-            parseInt(name.userId) === parseInt(user.recipientId)
-          ) {
-            return name;
-          }
-        });
-
-        if (
-          user.userId !== parseInt(userId) &&
-          user.recipient.id === parseInt(userId)
-        ) {
-          return (
-            <Chat
-              src={user.sender.imageUrl}
-              name={user.sender.userName}
-              id={user.sender.id}
-              messages={chatsSender}
-              data={subData}
-              myName={userName}
-            />
-          );
-        } else if (
-          user.recipientId !== parseInt(userId) &&
-          user.recipient.id !== parseInt(userId)
-        ) {
-          return (
-            <Chat
-              src={user.recipient.imageUrl}
-              name={user.recipient.userName}
-              id={user.recipient.id}
-              messages={chatsSender}
-              data={subData}
-              myName={userName}
-            />
-          );
-        }
-      });
-
-  const avatar2 = !allNames
-    ? "...loading"
-    : allNames.map((user) => {
-        if (
-          user.userId !== parseInt(userId) &&
-          user.recipient.id === parseInt(userId)
-        ) {
-          return (
-            <Avatar
-              alt="Remy Sharp"
-              src={user.sender.imageUrl}
-              className={classes.large}
-            />
-          );
-        } else if (
-          user.recipientId !== parseInt(userId) &&
-          user.recipient.id !== parseInt(userId)
-        ) {
-          return (
-            <Avatar
-              alt="Remy Sharp"
-              src={user.recipient.imageUrl}
-              className={classes.large}
-            />
-          );
-        }
-      });
-
-  const dogAvatar =
-    dogData === undefined
-      ? "...loading"
-      : dogData.allDogsUser.map((dog) => {
-          return (
-            <Avatar
-              alt="Remy Sharp"
-              src={dog.imageUrl}
-              className={classes.large}
-            />
-          );
-        });
+  if (!allNames || dogData === undefined) {
+    return "...loading";
+  }
 
   return (
     <>
-      <Grid className={classes.root} xs={2}>
+      <Grid className={classes.root} item={true} xs={2}>
         <TopBar />
-        <Typography className={classes.heading}>My messages</Typography>
+        <Typography className={classes.heading} component={"span"}>
+          My messages
+        </Typography>
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
-            <Typography className={classes.heading}>
-              {" "}
-              {avatar2 === null ? (
-                "No messages"
-              ) : avatar2 === [] ? (
-                "No messages"
-              ) : avatar2.length === 0 ? (
-                "No messages"
-              ) : (
-                <AvatarGroup max={4}> {avatar2}</AvatarGroup>
-              )}{" "}
+            <Typography className={classes.heading} component={"span"}>
+              <AvatarGroup max={4}>
+                {allNames.length === 0
+                  ? "No messages"
+                  : allNames.map((user) => {
+                      if (
+                        user.userId !== parseInt(userId) &&
+                        user.recipient.id === parseInt(userId)
+                      ) {
+                        return (
+                          <Avatar
+                            key={`avatar-${user.sender.id}`}
+                            alt={user.sender.userName}
+                            src={user.sender.imageUrl}
+                            className={classes.large}
+                          />
+                        );
+                      } else if (
+                        user.recipientId !== parseInt(userId) &&
+                        user.recipient.id !== parseInt(userId)
+                      ) {
+                        return (
+                          <Avatar
+                            key={`avatar-${user.recipient.id}`}
+                            alt={user.recipient.userName}
+                            src={user.recipient.imageUrl}
+                            className={classes.large}
+                          />
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+              </AvatarGroup>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography className={classes.spread}>
+            <Typography className={classes.spread} component={"span"}>
               {" "}
-              {avatar == undefined ? null : avatar}{" "}
+              {allNames.length === 0
+                ? "No messages"
+                : allNames.map((user) => {
+                    const chatsSender = sender.filter((name) => {
+                      if (
+                        name.recipientName === user.recipientName ||
+                        parseInt(name.userId) === parseInt(user.recipientId)
+                      ) {
+                        return name;
+                      } else {
+                        return null;
+                      }
+                    });
+
+                    if (
+                      user.userId !== parseInt(userId) &&
+                      user.recipient.id === parseInt(userId)
+                    ) {
+                      return (
+                        <Chat
+                          key={`chat-${user.sender.id}`}
+                          src={user.sender.imageUrl}
+                          name={user.sender.userName}
+                          id={user.sender.id}
+                          messages={chatsSender}
+                          data={subData}
+                          myName={data.user.userName}
+                        />
+                      );
+                    } else if (
+                      user.recipientId !== parseInt(userId) &&
+                      user.recipient.id !== parseInt(userId)
+                    ) {
+                      return (
+                        <Chat
+                          key={`chat-${user.recipient.id}`}
+                          src={user.recipient.imageUrl}
+                          name={user.recipient.userName}
+                          id={user.recipient.id}
+                          messages={chatsSender}
+                          data={subData}
+                          myName={data.user.userName}
+                        />
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}{" "}
             </Typography>
           </AccordionDetails>
         </Accordion>
-        <Typography className={classes.heading}>My dogs</Typography>
+        <Typography className={classes.heading} component={"span"}>
+          My dogs
+        </Typography>
         <Accordion>
           <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
-            <Typography className={classes.heading}>
-              <AvatarGroup max={3}> {dogAvatar}</AvatarGroup>
+            <Typography className={classes.heading} component={"span"}>
+              <AvatarGroup max={3}>
+                {" "}
+                {dogData.allDogsUser.length === 0
+                  ? "Add your first dog!"
+                  : dogData.allDogsUser.map((dog) => {
+                      return (
+                        <Avatar
+                          key={`avatarAllDog-${dog.id}`}
+                          alt="Remy Sharp"
+                          src={dog.imageUrl}
+                          className={classes.large}
+                        />
+                      );
+                    })}
+              </AvatarGroup>
             </Typography>
           </AccordionSummary>
           <AccordionDetails>

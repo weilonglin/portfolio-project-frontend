@@ -57,7 +57,7 @@ export default function Chat(props) {
       ? null
       : messages.map((message) => {
           return (
-            <div>
+            <div key={`chat-${message.id}`}>
               <ListItem key="1">
                 <Grid container>
                   <Grid item xs={12}>
@@ -118,35 +118,26 @@ export default function Chat(props) {
 
   return (
     <div>
-      <div>
-        <div>
-          {" "}
-          {["left"].map((anchor) => (
-            <React.Fragment key={anchor}>
-              <List>
-                <ListItem
-                  button
-                  key={name2}
-                  onClick={toggleDrawer(anchor, true)}
-                >
-                  <ListItemIcon>
-                    <Avatar alt={name2} src={image2} />
-                  </ListItemIcon>
-                  <ListItemText primary={name2}> {name2}</ListItemText>
-                </ListItem>
-              </List>
-              <Drawer
-                anchor={anchor}
-                open={state[anchor]}
-                onClose={toggleDrawer(anchor, false)}
-              >
-                {" "}
-                {list(anchor)}{" "}
-              </Drawer>
-            </React.Fragment>
-          ))}{" "}
-        </div>
-      </div>
+      {["left"].map((anchor) => (
+        <React.Fragment key={anchor}>
+          <List>
+            <ListItem button key={name2} onClick={toggleDrawer(anchor, true)}>
+              <ListItemIcon>
+                <Avatar alt={name2} src={image2} />
+              </ListItemIcon>
+              <ListItemText primary={name2}> {name2}</ListItemText>
+            </ListItem>
+          </List>
+          <Drawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+          >
+            {" "}
+            {list(anchor)}{" "}
+          </Drawer>
+        </React.Fragment>
+      ))}
     </div>
   );
 }

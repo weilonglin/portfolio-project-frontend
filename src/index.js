@@ -1,40 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  BrowserRouter as Router
-} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import {
-  split
-} from "@apollo/client";
-import {
-  getMainDefinition
-} from "@apollo/client/utilities";
+import { split } from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
 
-import {
-  ApolloProvider
-} from "@apollo/react-hooks";
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache
-} from "@apollo/client";
-import {
-  WebSocketLink
-} from "@apollo/client/link/ws";
+import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
 
-import {
-  setContext
-} from "@apollo/client/link/context";
+import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
 });
 const token = localStorage.getItem("token");
-const authLink = setContext((_, {
-  headers
-}) => {
+const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
@@ -54,9 +36,7 @@ const wsLink = new WebSocketLink({
 });
 
 const splitLink = split(
-  ({
-    query
-  }) => {
+  ({ query }) => {
     const definition = getMainDefinition(query);
     return (
       definition.kind === "OperationDefinition" &&
@@ -72,17 +52,12 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-ReactDOM.render( <
-  ApolloProvider client = {
-    client
-  } >
-  <
-  Router >
-  <
-  App / >
-  <
-  /Router> <
-  /ApolloProvider>,
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <Router forceRefresh={true}>
+      <App />
+    </Router>
+  </ApolloProvider>,
 
   document.getElementById("root")
 );
