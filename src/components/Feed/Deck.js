@@ -73,6 +73,9 @@ const useStyles = makeStyles(() => ({
   container: {
     minHeight: "100vh",
   },
+  text: {
+    textAlign: "center",
+  },
 }));
 
 export default function Deck() {
@@ -118,7 +121,7 @@ export default function Deck() {
   };
   const lefty =
     lastDirection === "left"
-      ? "No thanks"
+      ? "dislike"
       : lastDirection === "right"
       ? "Liked!"
       : "Swipe left to dislike and swipe right to like!";
@@ -167,11 +170,11 @@ export default function Deck() {
                       </Info>
                     </Box>
                   </Card>
-                  <Buttons dir={lefty} />
                 </TinderCard>
               </Card>
             );
         })}
+        {/* <Buttons dir={lefty} /> */}
       </Grid>
     </>
   );

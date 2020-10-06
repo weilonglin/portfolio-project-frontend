@@ -7,10 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(() => ({
   icon: {
     position: "absolute",
-    bottom: -90,
-    margin: "auto",
+    bottom: 30,
     textAlign: "center",
-    width: "100%",
   },
 }));
 

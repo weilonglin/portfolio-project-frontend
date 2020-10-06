@@ -211,12 +211,12 @@ export const LOGIN_USER = gql`
 export const SUB_MESSAGE = gql`
   subscription chatMessage($userId: Int!, $recipientId: Int!) {
     chatMessage(userId: $userId, recipientId: $recipientId) {
-      id
-      userId
       message
+      imageUrl
+      imageUrlRecipient
+      userId
       recipientId
       recipientName
-      imageUrlRecipient
       sender {
         id
         userName
