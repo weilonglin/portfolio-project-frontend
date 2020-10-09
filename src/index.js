@@ -26,7 +26,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://dogtinder-portfolio.herokuapp.com/graphql`,
+  uri: `wss://dogtinder-portfolio.herokuapp.com/graphql`,
   options: {
     reconnect: true,
     connectionParams: {
