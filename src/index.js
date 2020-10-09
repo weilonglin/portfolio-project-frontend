@@ -3,17 +3,58 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { split } from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
+
+import { setContext } from "@apollo/client/link/context";
+
+const httpLink = createHttpLink({
+  uri: "https://dogtinder-portfolio.herokuapp.com/graphql",
+});
+const token = localStorage.getItem("token");
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
+const wsLink = new WebSocketLink({
+  uri: `ws://dogtinder-portfolio.herokuapp.com/graphql`,
+  options: {
+    reconnect: true,
+    connectionParams: {
+      authToken: token,
+    },
+  },
+});
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink
+);
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+  link: authLink.concat(splitLink),
+  cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Router>
+    <Router forceRefresh={true}>
       <App />
     </Router>
   </ApolloProvider>,
@@ -21,7 +62,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
