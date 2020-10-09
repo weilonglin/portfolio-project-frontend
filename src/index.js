@@ -13,7 +13,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: "https://dogtinder-portfolio.herokuapp.com/graphql",
 });
 const token = localStorage.getItem("token");
 const authLink = setContext((_, { headers }) => {
@@ -26,7 +26,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://dogtinder-portfolio.herokuapp.com/graphql`,
   options: {
     reconnect: true,
     connectionParams: {

@@ -49,8 +49,8 @@ export default function SignupUser(props) {
   const [errors, setErrors] = useState({});
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
-    update: (_, __) => props.history.push("/feed"),
-    onError: (err) => setErrors(err.graphQLErrors[0]).then(console.log(errors)),
+    update: (_, __) => props.history.push("/feed")
+
   });
 
   const submitRegisterForm = (e) => {

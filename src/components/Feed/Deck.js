@@ -169,7 +169,7 @@ export default function Deck() {
             );
           }
         })}
-        <Buttons dir={lefty} />
+        {/* <Buttons dir={lefty} /> */}
       </Grid>
     </>
   );

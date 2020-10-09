@@ -121,7 +121,6 @@ export default function SideNav(props) {
     const filtered6 = filtered5 === null ? null : filtered5.flat();
     const filtered7 = getUnique(filtered6, "userName");
     setAllnames(filtered7);
-    console.log(filtered7);
     setSender(msgT);
   }, [msgData, msgT]);
 
@@ -137,7 +136,6 @@ export default function SideNav(props) {
     const newMessage = [...sender, subMessages];
     const filtered = getUnique(newNames, "userName");
 
-    console.log(filtered);
 
     setAllnames(filtered);
 
