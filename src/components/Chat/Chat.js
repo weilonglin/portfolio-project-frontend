@@ -61,7 +61,9 @@ export default function Chat(props) {
               <ListItem key="1">
                 <Grid container>
                   <Grid item xs={12}>
-                    <ListItem button key="CindyBaker">
+                    {parseInt(message.userId) === parseInt(user) ?
+                      
+                      <ListItem button key="CindyBaker">
                       <ListItemText
                         align={
                           parseInt(message.userId) === parseInt(user)
@@ -85,7 +87,32 @@ export default function Chat(props) {
                           }
                         />
                       </ListItemIcon>
-                    </ListItem>
+                    </ListItem> : <ListItem button key="CindyBaker">
+                    <ListItemIcon>
+                        <Avatar
+                          alt="Cindy Baker"
+                          src={
+                            parseInt(message.userId) === parseInt(user)
+                              ? userImage
+                              : image2
+                          }
+                          align={
+                            parseInt(message.userId) === parseInt(user)
+                              ? "right"
+                              : "left"
+                          }
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        align={
+                          parseInt(message.userId) === parseInt(user)
+                            ? "right"
+                            : "left"
+                        }
+                        primary={message.message}
+                      ></ListItemText>
+                      
+                    </ListItem>}
                   </Grid>
                 </Grid>
               </ListItem>
