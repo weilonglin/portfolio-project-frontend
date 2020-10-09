@@ -74,7 +74,7 @@ export default function Register(props) {
         <Typography component="h4" variant="h6">
           Hey there stranger! This is is an MVP, there's little to no security, so DO use simple information like "123" as a password :). There's no email verification, so PLEASE use something like "CEOOFGOOGLE@facebook.com. 
         </Typography>
-
+        
        
         <form className={classes.form} onSubmit={submitLoginForm}>
           <TextField

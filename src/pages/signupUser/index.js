@@ -46,7 +46,7 @@ export default function SignupUser(props) {
     city: "",
     imageUrl: "",
   });
-  const [errors, setErrors] = useState({});
+ 
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
     update: (_, __) => props.history.push("/feed")

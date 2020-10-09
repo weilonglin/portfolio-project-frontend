@@ -13,7 +13,6 @@ import { useGalaxyInfoStyles } from "@mui-treasury/styles/info/galaxy";
 import { useCoverCardMediaStyles } from "@mui-treasury/styles/cardMedia/cover";
 import NoSsr from "@material-ui/core/NoSsr";
 import GoogleFontLoader from "react-google-font-loader";
-import Buttons from "./Buttons";
 
 import "../Homepage/Deck.css";
 
@@ -78,7 +77,6 @@ const useStyles = makeStyles(() => ({
 
 export default function Deck() {
   const user = localStorage.getItem("user");
-  const [lastDirection, setLastDirection] = useState();
   const [msgerrors, setmsgErrors] = useState({});
   const styles = useStyles();
   const userId = localStorage.getItem("user");
@@ -92,7 +90,7 @@ export default function Deck() {
   const { loading, error, data } = useQuery(GET_ALL_DOGS);
 
   const swiped = (direction, nameToDelete, userName, ownerId) => {
-    setLastDirection(direction);
+
     if (direction === "right") {
       sendMessage({
         variables: {
@@ -113,12 +111,12 @@ export default function Deck() {
   const outOfFrame = (name) => {
     console.log(name + " left the screen!");
   };
-  const lefty =
-    lastDirection === "left"
-      ? "dislike"
-      : lastDirection === "right"
-      ? "Liked!"
-      : "Swipe left to dislike and swipe right to like!";
+  // const lefty =
+  //   lastDirection === "left"
+  //     ? "dislike"
+  //     : lastDirection === "right"
+  //     ? "Liked!"
+  //     : "Swipe left to dislike and swipe right to like!";
 
   return (
     <>
