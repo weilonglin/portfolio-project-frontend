@@ -5,6 +5,7 @@ import { useMutation } from "@apollo/react-hooks";
 import Grid from "@material-ui/core/Grid";
 import Fab from "@material-ui/core/Fab";
 import SendIcon from "@material-ui/icons/Send";
+import { setRef } from "@material-ui/core";
 
 export default function SendMessages(props) {
   const [variables, setVariables] = useState({
@@ -21,7 +22,9 @@ export default function SendMessages(props) {
 
   const submitMessage = (e) => {
     e.preventDefault();
+    
     sendMessage({ variables });
+    setVariables({ ...variables, message: "" })
   };
 
   return (
