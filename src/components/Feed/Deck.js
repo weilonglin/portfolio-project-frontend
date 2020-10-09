@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TinderCard from "react-tinder-card";
 import { useQuery } from "@apollo/react-hooks";
 import { useMutation } from "@apollo/react-hooks";
@@ -91,10 +91,6 @@ export default function Deck() {
 
   const { loading, error, data } = useQuery(GET_ALL_DOGS);
 
-  if (loading) return "Loading...";
-
-  if (error) return <p>Error! ${error.message}</p>;
-
   const swiped = (direction, nameToDelete, userName, ownerId) => {
     setLastDirection(direction);
     if (direction === "right") {
@@ -110,6 +106,10 @@ export default function Deck() {
     }
   };
 
+  if (loading) return "Loading...";
+
+  if (error) return <p>Error! ${error.message}</p>;
+
   const outOfFrame = (name) => {
     console.log(name + " left the screen!");
   };
@@ -119,6 +119,7 @@ export default function Deck() {
       : lastDirection === "right"
       ? "Liked!"
       : "Swipe left to dislike and swipe right to like!";
+
   return (
     <>
       <Grid style={{ margin: "auto", width: "15%", paddingTop: "100px" }}>

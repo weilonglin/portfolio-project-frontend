@@ -108,10 +108,20 @@ export default function SideNav(props) {
   }
 
   useEffect(() => {
-    const filtered = getUnique(msgT, "recipientName");
-
-    setAllnames(filtered);
-
+    const filtered = getUnique(msgT, "recipient");
+    const filtered2 = getUnique(msgT, "sender");
+    const filtered3 = filtered !== null ? filtered.concat(filtered2) : null;
+    const filtered4 = getUnique(filtered3, "recipientName");
+    const filtered5 =
+      filtered4 === null
+        ? null
+        : filtered4.map((filter) => {
+            return [filter.recipient, filter.sender];
+          });
+    const filtered6 = filtered5 === null ? null : filtered5.flat();
+    const filtered7 = getUnique(filtered6, "userName");
+    setAllnames(filtered7);
+    console.log(filtered7);
     setSender(msgT);
   }, [msgData, msgT]);
 
@@ -119,9 +129,15 @@ export default function SideNav(props) {
     const subChat = subLoading ? null : subData.chatMessage;
     const subMessages = subLoading ? null : subData.chatMessage;
 
-    const newNames = [...allNames, subChat];
+    const newNames =
+      subChat === null
+        ? null
+        : [...allNames, subChat.sender, subChat.recipient];
+
     const newMessage = [...sender, subMessages];
-    const filtered = getUnique(newNames, "recipientName");
+    const filtered = getUnique(newNames, "userName");
+
+    console.log(filtered);
 
     setAllnames(filtered);
 
@@ -136,7 +152,7 @@ export default function SideNav(props) {
     }
   }, [userImage]);
 
-  if (!allNames || dogData === undefined) {
+  if (!allNames || dogData === undefined || !data) {
     return "...loading";
   }
 
@@ -154,27 +170,12 @@ export default function SideNav(props) {
                 {allNames.length === 0
                   ? "No messages"
                   : allNames.map((user) => {
-                      if (
-                        user.userId !== parseInt(userId) &&
-                        user.recipient.id === parseInt(userId)
-                      ) {
+                      if (user.id !== parseInt(userId)) {
                         return (
                           <Avatar
-                            key={`avatar-${user.sender.id}`}
-                            alt={user.sender.userName}
-                            src={user.sender.imageUrl}
-                            className={classes.large}
-                          />
-                        );
-                      } else if (
-                        user.recipientId !== parseInt(userId) &&
-                        user.recipient.id !== parseInt(userId)
-                      ) {
-                        return (
-                          <Avatar
-                            key={`avatar-${user.recipient.id}`}
-                            alt={user.recipient.userName}
-                            src={user.recipient.imageUrl}
+                            key={`avatar-${user.id}`}
+                            alt={user.userName}
+                            src={user.imageUrl}
                             className={classes.large}
                           />
                         );
@@ -193,8 +194,8 @@ export default function SideNav(props) {
                 : allNames.map((user) => {
                     const chatsSender = sender.filter((name) => {
                       if (
-                        name.recipientName === user.recipientName ||
-                        parseInt(name.userId) === parseInt(user.recipientId)
+                        name.recipientName === user.userName ||
+                        parseInt(name.userId) === parseInt(user.id)
                       ) {
                         return name;
                       } else {
@@ -202,31 +203,13 @@ export default function SideNav(props) {
                       }
                     });
 
-                    if (
-                      user.userId !== parseInt(userId) &&
-                      user.recipient.id === parseInt(userId)
-                    ) {
+                    if (user.id !== parseInt(userId)) {
                       return (
                         <Chat
-                          key={`chat-${user.sender.id}`}
-                          src={user.sender.imageUrl}
-                          name={user.sender.userName}
-                          id={user.sender.id}
-                          messages={chatsSender}
-                          data={subData}
-                          myName={data.user.userName}
-                        />
-                      );
-                    } else if (
-                      user.recipientId !== parseInt(userId) &&
-                      user.recipient.id !== parseInt(userId)
-                    ) {
-                      return (
-                        <Chat
-                          key={`chat-${user.recipient.id}`}
-                          src={user.recipient.imageUrl}
-                          name={user.recipient.userName}
-                          id={user.recipient.id}
+                          key={`chat-${user.id}`}
+                          src={user.imageUrl}
+                          name={user.userName}
+                          id={user.id}
                           messages={chatsSender}
                           data={subData}
                           myName={data.user.userName}
