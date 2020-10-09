@@ -69,12 +69,11 @@ export default function SignupUser(props) {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Typography component="h4" variant="h5">
+        <Typography component="h4" variant="h6">
           Hey there stranger! This is is an MVP, there's little to no security, so DO use simple information like "123" as a password :). There's no email verification, so PLEASE use something like "CEOOFGOOGLE@facebook.com. 
         </Typography>
 
-        <Typography component="h4" variant="h5">
-Thanks for visiting, enjoy!        </Typography>
+        
         <form className={classes.form} onSubmit={submitRegisterForm}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
