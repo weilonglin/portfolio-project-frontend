@@ -1,5 +1,8 @@
 # Dog Tinder 🐕
 
+[Click here for the deployed MVP](https://thawing-fortress-10562.herokuapp.com/)
+
+
 [Click here to view backend repo](https://github.com/weilonglin/portfolio-project-backend)
 
 <img width="500px" src="./homepage.png"/>
